@@ -5,9 +5,9 @@ import { apolloClient } from "services/apollo/apollo"
 import { LOGIN_MUTATION, LOGOUT_MUTATION, REGISTER_MUTATION, REFRESH_TOKEN_MUTATION } from "./gql/mutations"
 import { LoginPayload, RegisterPayload } from "./authTypes"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
-import { ACCESS_TOKEN_COOKIE_LIFETIME } from "config";
 
-const ACCESS_TOKEN_COOKIE_NAME = "accessToken";
+const ACCESS_TOKEN_COOKIE_NAME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_NAME;
+const ACCESS_TOKEN_COOKIE_LIFETIME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_LIFETIME;
 
 const cookies = new Cookies();
 
@@ -66,7 +66,9 @@ export const register = async (payload: RegisterPayload) => {
     try {
         const { data: { auth_register: { accessToken } } } = await apolloClient.mutate({
             mutation: REGISTER_MUTATION,
-            variables: payload
+            variables: {
+                object: payload
+            }
         });
         updateAccessToken(accessToken);
     } catch (error) {

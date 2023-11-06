@@ -1,1 +1,0 @@
-export const ACCESS_TOKEN_COOKIE_LIFETIME: number = 86400;
