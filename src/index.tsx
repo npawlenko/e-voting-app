@@ -1,24 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ApolloProvider } from '@apollo/client';
+import { apolloClient } from 'services/apollo/apollo';
+import { store } from './store';
+import { initializeAuthContext } from 'services/auth';
+import router from 'router';
+import "assets/styles/index.scss";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />
-  }
-]);
+initializeAuthContext(store);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <Provider store={store}>
+    <ApolloProvider client={apolloClient}>
+      <React.StrictMode>
+        <RouterProvider router={router} />
+      </React.StrictMode>
+    </ApolloProvider>
+  </Provider>
 );
 
 // If you want to start measuring performance in your app, pass a function
