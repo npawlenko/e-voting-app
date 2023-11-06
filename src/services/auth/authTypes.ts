@@ -11,11 +11,3 @@ export type RegisterPayload = {
     email: string;
     password: string;
 }
-
-export type TokenClaims = {
-    sub: string;
-    role: Role;
-    fullName: string;
-    exp: number;
-    iat: number;
-}

@@ -1,2 +1,2 @@
 export type { LoginPayload, RegisterPayload } from "./authTypes";
-export default "./authService"; 
+export { isLoggedIn, initializeAuthContext, login, logout, register, refreshToken } from "./authService"; 

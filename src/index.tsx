@@ -1,26 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
-import { graphqlClient } from 'utils/apollo';
+import { apolloClient } from 'services/apollo/apollo';
 import { store } from './store';
+import { initializeAuthContext } from 'services/auth';
+import router from 'router';
+import "assets/styles/index.scss";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />
-  }
-]);
+initializeAuthContext(store);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <Provider store={store}>
-    <ApolloProvider client={graphqlClient}>
+    <ApolloProvider client={apolloClient}>
       <React.StrictMode>
         <RouterProvider router={router} />
       </React.StrictMode>
