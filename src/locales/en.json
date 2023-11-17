@@ -1,0 +1,15 @@
+{
+    "welcome": "Welcome to VoteCampus",
+    "systemDescription": "A system supporting university administration through electronic voting.",
+    "register": "Register",
+    "login": "Login",
+    "footer": {
+        "copyright": "© {{year}} VoteCampus",
+        "privacyPolicy": "Privacy Policy",
+        "language": "Language"
+    },
+    "languages": {
+        "en": "English",
+        "pl": "Polski"
+    }
+  }

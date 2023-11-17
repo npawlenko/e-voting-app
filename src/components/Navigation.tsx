@@ -20,7 +20,7 @@ const Navigation = () => {
       <Container fixed>
       <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Moja Aplikacja
+            VoteCampus
           </Typography>
           <Button component={Link} to="/" color="inherit">
             Strona Główna

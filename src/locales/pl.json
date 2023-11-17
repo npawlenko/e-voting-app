@@ -1,0 +1,15 @@
+{
+    "welcome": "Witaj w VoteCampus",
+    "systemDescription": "System wspomagający administrację uczelni poprzez elektroniczne głosowania.",
+    "register": "Zarejestruj się",
+    "login": "Zaloguj się",
+    "footer": {
+        "copyright": "© {{year}} VoteCampus",
+        "privacyPolicy": "Polityka Prywatności",
+        "language": "Język"
+    },
+    "languages": {
+        "en": "English",
+        "pl": "Polski"
+    }
+  }
