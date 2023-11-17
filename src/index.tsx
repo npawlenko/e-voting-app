@@ -8,6 +8,7 @@ import { apolloClient } from 'services/apollo/apollo';
 import { store } from './store';
 import { initializeAuthContext } from 'services/auth';
 import router from 'router';
+import './i18n';
 import "assets/styles/index.scss";
 
 initializeAuthContext(store);
