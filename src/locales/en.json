@@ -1,8 +1,16 @@
 {
     "welcome": "Welcome to VoteCampus",
     "systemDescription": "A system supporting university administration through electronic voting.",
+    "homePage": "Home",
     "register": "Register",
+    "registerButton": "Register",
     "login": "Login",
+    "loginButton": "Login",
+    "logout": "Logout",
+    "emailAddress": "E-mail",
+    "password": "Password",
+    "firstName": "First name",
+    "lastName": "Last name",
     "footer": {
         "copyright": "© {{year}} VoteCampus",
         "privacyPolicy": "Privacy Policy",
@@ -11,5 +19,12 @@
     "languages": {
         "en": "English",
         "pl": "Polski"
+    },
+    "error": {
+        "server": "An error occurred while communicating with the server",
+        "auth": {
+            "notLoggedIn": "You need to be logged in to do that!",
+            "alreadyLoggedIn": "You're already logged in!"
+        }
     }
   }

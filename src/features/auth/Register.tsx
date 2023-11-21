@@ -3,10 +3,12 @@ import { useNavigate } from "react-router";
 import { isLoggedIn, register, RegisterPayload } from "services/auth";
 import { useForm, Controller } from "react-hook-form";
 import { Container, Paper, Typography, TextField, Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 
 const Register = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const {
     handleSubmit,
     control,
@@ -33,7 +35,7 @@ const Register = () => {
     <Container maxWidth="xs">
       <Paper elevation={0} style={{ padding: "20px" }}>
         <Typography variant="h4" align="center" gutterBottom>
-          Rejestracja
+          {t('register')}
         </Typography>
         <form onSubmit={onSubmit}>
           <Controller
@@ -43,7 +45,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Imię"
+                label={t('firstName')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -59,7 +61,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Nazwisko"
+                label={t('lastName')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -75,7 +77,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Adres email"
+                label={t('emailAddress')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -91,7 +93,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Hasło"
+                label={t('password')}
                 type="password"
                 variant="outlined"
                 fullWidth
@@ -102,7 +104,7 @@ const Register = () => {
           {errors.password && <p>{errors.password.message}</p>}
 
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            Zarejestruj się
+            {t('register')}
           </Button>
         </form>
       </Paper>
