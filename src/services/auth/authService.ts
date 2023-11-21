@@ -5,6 +5,8 @@ import { apolloClient } from "services/apollo/apollo"
 import { LOGIN_MUTATION, LOGOUT_MUTATION, REGISTER_MUTATION, REFRESH_TOKEN_MUTATION } from "./gql/mutations"
 import { LoginPayload, RegisterPayload } from "./authTypes"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
+import { showError, showAndLogError } from "utils/errorUtils";
+import { ErrorSeverity } from "features/error/ApplicationError";
 
 const ACCESS_TOKEN_COOKIE_NAME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_NAME;
 const ACCESS_TOKEN_COOKIE_LIFETIME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_LIFETIME;
@@ -26,7 +28,8 @@ export const isLoggedIn = (): boolean => {
 
 export const logout = async () => {
     if (!isLoggedIn()) {
-        throw new Error("You're not logged in!");
+        showError('error.auth.notLoggedIn', ErrorSeverity.ERROR);
+        return;
     }
 
     try {
@@ -35,15 +38,15 @@ export const logout = async () => {
         });
         updateAccessToken(null);
     } catch (error) {
-        console.error("Error when trying to logout: ", error);
-        // TODO: not logged in error / api error handling
+        console.error(error);
         throw error;
     }
 }
 
 export const login = async (payload: LoginPayload) => {
     if (isLoggedIn()) {
-        throw new Error("You're already logged in!");
+        showError('error.auth.alreadyLoggedIn', ErrorSeverity.ERROR);
+        return;
     }
 
     try {
@@ -60,7 +63,8 @@ export const login = async (payload: LoginPayload) => {
 
 export const register = async (payload: RegisterPayload) => {
     if (isLoggedIn()) {
-        throw new Error("You're already logged in! Please logout first");
+        showError('error.auth.alreadyLoggedIn', ErrorSeverity.ERROR);
+        return;
     }
 
     try {

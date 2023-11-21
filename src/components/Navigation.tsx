@@ -2,9 +2,11 @@ import { AppBar, Typography, Button, Container, Toolbar } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import { logout } from 'services/auth'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 const Navigation = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogout = async () => {
     try {
@@ -23,16 +25,16 @@ const Navigation = () => {
             VoteCampus
           </Typography>
           <Button component={Link} to="/" color="inherit">
-            Strona Główna
+            {t('homePage')}
           </Button>
           <Button component={Link} to="/auth/register" color="inherit">
-            Rejestracja
+            {t('registerButton')}
           </Button>
           <Button component={Link} to="/auth/login" color="inherit">
-            Logowanie
+            {t('loginButton')}
           </Button>
           <Button onClick={handleLogout} color="inherit">
-            Wyloguj
+            {t('logout')}
           </Button>
         </Toolbar>
       </Container>

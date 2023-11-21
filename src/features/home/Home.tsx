@@ -16,10 +16,10 @@ const Home = () => {
       </Typography>
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
         <Button component={Link} to="/auth/register" variant="contained" color="primary" style={{ marginRight: '10px' }}>
-          {t('register')}
+          {t('registerButton')}
         </Button>
         <Button component={Link} to="/auth/login" variant="contained" color="primary">
-          {t('login')}
+          {t('loginButton')}
         </Button>
       </div>
     </Container>

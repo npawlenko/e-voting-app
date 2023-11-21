@@ -4,6 +4,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import ErrorAlert from 'features/error/ErrorAlert';
 
 const darkTheme = createTheme({
   palette: {
@@ -21,6 +22,8 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
+      <ErrorAlert />
+
       <Navigation />
 
       <main>
@@ -29,7 +32,6 @@ function App() {
       
       <Footer />
     </ThemeProvider>
-    
   );
 }
 
