@@ -5,7 +5,7 @@ import { apolloClient } from "services/apollo/apollo"
 import { LOGIN_MUTATION, LOGOUT_MUTATION, REGISTER_MUTATION, REFRESH_TOKEN_MUTATION } from "./gql/mutations"
 import { LoginPayload, RegisterPayload } from "./authTypes"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
-import { showError, showAndLogError } from "utils/errorUtils";
+import { showAlert, showAlertAndLog } from "utils/errorUtils";
 import { ErrorSeverity } from "features/error/ApplicationError";
 
 const ACCESS_TOKEN_COOKIE_NAME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_NAME;
@@ -28,7 +28,7 @@ export const isLoggedIn = (): boolean => {
 
 export const logout = async () => {
     if (!isLoggedIn()) {
-        showError('error.auth.notLoggedIn', ErrorSeverity.ERROR);
+        throw new Error('error.auth.notLoggedIn');
         return;
     }
 
@@ -45,8 +45,7 @@ export const logout = async () => {
 
 export const login = async (payload: LoginPayload) => {
     if (isLoggedIn()) {
-        showError('error.auth.alreadyLoggedIn', ErrorSeverity.ERROR);
-        return;
+        throw new Error('error.auth.alreadyLoggedIn');
     }
 
     try {
@@ -55,6 +54,7 @@ export const login = async (payload: LoginPayload) => {
             variables: payload
         });
         updateAccessToken(accessToken);
+        showAlert('auth.loggedIn', ErrorSeverity.SUCCESS);
     } catch (error) {
         console.error("Error when trying to login: ", error);
         throw error;
@@ -63,8 +63,7 @@ export const login = async (payload: LoginPayload) => {
 
 export const register = async (payload: RegisterPayload) => {
     if (isLoggedIn()) {
-        showError('error.auth.alreadyLoggedIn', ErrorSeverity.ERROR);
-        return;
+        throw new Error('error.auth.alreadyLoggedIn');
     }
 
     try {

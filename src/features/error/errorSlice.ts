@@ -20,7 +20,6 @@ const errorSlice = createSlice({
   reducers: {
     setError: (state, action: PayloadAction<ApplicationError | null>) => {
         state.message = null;
-        state.severity = null;
         state.parameters = null;
 
         let error;
