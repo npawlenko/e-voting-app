@@ -11,6 +11,11 @@
     "password": "Hasło",
     "firstName": "Imię",
     "lastName": "Nazwisko",
+    "auth": {
+        "loggedIn": "Pomyślnie zalogowałeś się na konto",
+        "loggedOut": "Zostałeś wylogowany",
+        "registered": "Twoje konto zostało pomyślnie zarejestrowane"
+    },
     "footer": {
         "copyright": "© {{year}} VoteCampus",
         "privacyPolicy": "Polityka Prywatności",

@@ -4,6 +4,7 @@ import { isLoggedIn, register, RegisterPayload } from "services/auth";
 import { useForm, Controller } from "react-hook-form";
 import { Container, Paper, Typography, TextField, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { showAlertAndLog } from "utils/errorUtils";
 
 
 const Register = () => {
@@ -22,13 +23,9 @@ const Register = () => {
   }, [navigate]);
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      await register(data);
-
-      navigate("/");
-    } catch (error) {
-      console.error("Błąd rejestracji: ", error);
-    }
+      await register(data).then(() => {
+        navigate("/");
+      }).catch(showAlertAndLog);
   });
 
   return (

@@ -11,6 +11,11 @@
     "password": "Password",
     "firstName": "First name",
     "lastName": "Last name",
+    "auth": {
+        "loggedIn": "Logged in successfully",
+        "loggedOut": "Logged out successfully",
+        "registered": "Your account has been registered successfully"
+    },
     "footer": {
         "copyright": "© {{year}} VoteCampus",
         "privacyPolicy": "Privacy Policy",

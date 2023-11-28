@@ -4,6 +4,7 @@ import { login, isLoggedIn } from "services/auth";
 import { useForm, Controller } from "react-hook-form";
 import { Container, Paper, Typography, TextField, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { showAlertAndLog } from "utils/errorUtils";
 
 type LoginFormValues = {
   email: string;
@@ -26,13 +27,9 @@ const Login = () => {
   }, [navigate]);
 
   const onSubmit = handleSubmit(async (data) => {
-    try {
-      await login(data);
-
+    login(data).then(() => {
       navigate("/");
-    } catch (error) {
-      console.error("Błąd logowania: ", error);
-    }
+    }).catch(showAlertAndLog);
   });
 
   return (

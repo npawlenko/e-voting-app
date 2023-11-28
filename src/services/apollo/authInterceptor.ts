@@ -2,7 +2,7 @@ import { ApolloLink, Observable } from '@apollo/client';
 import { Subscription } from 'zen-observable-ts';
 import { store } from "store";
 import { isLoggedIn } from 'services/auth/authService';
-import { showAndLogError } from 'utils/errorUtils';
+import { showAlert } from 'utils/errorUtils';
 
 export const authInterceptor = new ApolloLink((operation, forward) => {
     return new Observable((observer) => {
@@ -21,7 +21,7 @@ export const authInterceptor = new ApolloLink((operation, forward) => {
                 next: observer.next.bind(observer),
                 error: (error) => {
                     if(error) {
-                        showAndLogError("error.server", error);
+                        showAlert("error.server");
                     }
                     else {
                         observer.error(error);

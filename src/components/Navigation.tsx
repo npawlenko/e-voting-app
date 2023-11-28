@@ -3,18 +3,18 @@ import { Link, useNavigate } from 'react-router-dom'
 import { logout } from 'services/auth'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { showAlertAndLog, showAlert } from 'utils/errorUtils'
+import { ErrorSeverity } from 'features/error/ApplicationError'
 
 const Navigation = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   const handleLogout = async () => {
-    try {
-      logout();
+    logout().then(() => {
+      showAlert("auth.loggedOut", ErrorSeverity.SUCCESS);
       navigate("/");
-    } catch (error) {
-      console.error("Błąd wylogowywania: ", error);
-    }
+    }).catch(showAlertAndLog);
   };
 
   return (
