@@ -11,6 +11,8 @@
     "password": "Password",
     "firstName": "First name",
     "lastName": "Last name",
+    "myPolls": "My polls",
+    "availablePolls": "Available polls",
     "auth": {
         "loggedIn": "Logged in successfully",
         "loggedOut": "Logged out successfully",

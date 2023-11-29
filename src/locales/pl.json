@@ -11,6 +11,8 @@
     "password": "Hasło",
     "firstName": "Imię",
     "lastName": "Nazwisko",
+    "myPolls": "Moje ankiety",
+    "availablePolls": "Dostępne ankiety",
     "auth": {
         "loggedIn": "Pomyślnie zalogowałeś się na konto",
         "loggedOut": "Zostałeś wylogowany",

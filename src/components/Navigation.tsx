@@ -5,10 +5,13 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { showAlertAndLog, showAlert } from 'utils/errorUtils'
 import { ErrorSeverity } from 'features/error/ApplicationError'
+import { useSelector } from 'react-redux'
+import { RootState } from 'store/store'
 
 const Navigation = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.accessToken !== null);
 
   const handleLogout = async () => {
     logout().then(() => {
@@ -27,15 +30,23 @@ const Navigation = () => {
           <Button component={Link} to="/" color="inherit">
             {t('homePage')}
           </Button>
-          <Button component={Link} to="/auth/register" color="inherit">
-            {t('registerButton')}
-          </Button>
-          <Button component={Link} to="/auth/login" color="inherit">
-            {t('loginButton')}
-          </Button>
-          <Button onClick={handleLogout} color="inherit">
-            {t('logout')}
-          </Button>
+          {
+          isLoggedIn ?
+            <Button onClick={handleLogout} color="inherit">
+              {t('logout')}
+            </Button>
+            :
+            <>
+              <Button component={Link} to="/auth/register" color="inherit">
+                {t('registerButton')}
+              </Button>
+              <Button component={Link} to="/auth/login" color="inherit">
+                {t('loginButton')}
+              </Button>
+            </>
+          }
+          
+          
         </Toolbar>
       </Container>
     </AppBar>

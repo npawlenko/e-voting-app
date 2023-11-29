@@ -13,7 +13,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home /> // Dodaliśmy nową ścieżkę dla strony głównej
+                element: <Home />
             },
             {
                 path: "auth",

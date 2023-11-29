@@ -2,7 +2,7 @@ import { store } from "store";
 import { setAccessToken } from "features/auth/authSlice"
 import Cookies from "universal-cookie";
 import { apolloClient } from "services/apollo/apollo"
-import { LOGIN_MUTATION, LOGOUT_MUTATION, REGISTER_MUTATION, REFRESH_TOKEN_MUTATION } from "./gql/mutations"
+import { LOGIN, LOGOUT, REGISTER, REFRESH_TOKEN } from "./gql/mutations"
 import { LoginPayload, RegisterPayload } from "./authTypes"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 import { showAlert, showAlertAndLog } from "utils/errorUtils";
@@ -34,11 +34,11 @@ export const logout = async () => {
 
     try {
         await apolloClient.mutate({
-            mutation: LOGOUT_MUTATION
+            mutation: LOGOUT
         });
         updateAccessToken(null);
     } catch (error) {
-        console.error(error);
+        updateAccessToken(null);
         throw error;
     }
 }
@@ -50,7 +50,7 @@ export const login = async (payload: LoginPayload) => {
 
     try {
         const { data: { auth_login: { accessToken } } } = await apolloClient.mutate({
-            mutation: LOGIN_MUTATION,
+            mutation: LOGIN,
             variables: payload
         });
         updateAccessToken(accessToken);
@@ -68,7 +68,7 @@ export const register = async (payload: RegisterPayload) => {
 
     try {
         const { data: { auth_register: { accessToken } } } = await apolloClient.mutate({
-            mutation: REGISTER_MUTATION,
+            mutation: REGISTER,
             variables: {
                 object: payload
             }
@@ -83,7 +83,7 @@ export const register = async (payload: RegisterPayload) => {
 export const refreshToken = async () => {
     try {
         const { data: { auth_refresh: { accessToken } } } = await apolloClient.mutate({
-            mutation: REFRESH_TOKEN_MUTATION
+            mutation: REFRESH_TOKEN
         });
         updateAccessToken(accessToken);
     } catch (error) {
