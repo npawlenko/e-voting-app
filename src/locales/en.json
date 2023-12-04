@@ -13,6 +13,9 @@
     "lastName": "Last name",
     "myPolls": "My polls",
     "availablePolls": "Available polls",
+    "createdAt": "Created at",
+    "closesAt": "Closes at",
+    "public": "Public",
     "auth": {
         "loggedIn": "Logged in successfully",
         "loggedOut": "Logged out successfully",
@@ -31,7 +34,8 @@
         "server": "An error occurred while communicating with the server",
         "auth": {
             "notLoggedIn": "You need to be logged in to do that!",
-            "alreadyLoggedIn": "You're already logged in!"
+            "alreadyLoggedIn": "You're already logged in!",
+            "sessionExpired": "Your session has expired. Please log in again"
         }
     }
   }

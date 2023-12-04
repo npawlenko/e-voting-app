@@ -4,6 +4,7 @@ export const LOGIN = gql`
     mutation AuthLogin($email: String!, $password: String!) {
         auth_login(email: $email, password: $password) {
             accessToken
+            refreshToken
         }
     }
 `;
@@ -12,6 +13,7 @@ export const REGISTER = gql`
     mutation AuthRegister($object: user_register_input!) {
         auth_register(object: $object) {
             accessToken
+            refreshToken
         }
     }
 `;
@@ -23,9 +25,10 @@ export const LOGOUT = gql`
 `;
 
 export const REFRESH_TOKEN = gql`
-    mutation { 
-        auth_refresh {
+    mutation AuthRefresh($refreshToken: String!) { 
+        auth_refresh(refresh_token: $refreshToken) {
             accessToken
+            refreshToken
         }
     }
 `;

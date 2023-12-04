@@ -1,5 +1,6 @@
 import App from "App";
 import ErrorPage from "components/ErrorPage";
+import Poll from "components/poll/Poll";
 import Login from "features/auth/Login";
 import Register from "features/auth/Register";
 import Home from "features/home/Home";
@@ -28,6 +29,15 @@ const router = createBrowserRouter([
                     },
                 ]
             },
+            {
+                path: "poll",
+                children: [
+                    {
+                        path: ":id",
+                        element: <Poll />
+                    }
+                ]
+            }
         ]
     }
 ]);

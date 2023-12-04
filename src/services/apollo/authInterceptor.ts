@@ -1,41 +1,14 @@
-import { ApolloLink, Observable } from '@apollo/client';
-import { Subscription } from 'zen-observable-ts';
+import { ApolloLink, FetchResult, Observable, Operation } from '@apollo/client';
 import { store } from "store";
-import { isLoggedIn } from 'services/auth/authService';
-import { showAlert } from 'utils/errorUtils';
 
 export const authInterceptor = new ApolloLink((operation, forward) => {
-    return new Observable((observer) => {
-        let handle: Subscription | undefined;
-        try {
-            if (isLoggedIn()) {
-                const accessToken = store.getState().auth.accessToken;
-                operation.setContext({
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                });
-            }
-
-            handle = forward(operation).subscribe({
-                next: observer.next.bind(observer),
-                error: (error) => {
-                    if(error) {
-                        showAlert("error.server");
-                    }
-                    else {
-                        observer.error(error);
-                    }
-                },
-                complete: observer.complete.bind(observer)
-            })
-        } catch (e) {
-            console.error('Błąd podczas obsługi operacji:', e);
-            observer.error(e);
+    const accessToken = store.getState().auth.accessToken;
+    operation.setContext(({ headers }: { headers: Record<string, string> }) => ({
+        headers: {
+            ...headers,
+            Authorization: accessToken ? `Bearer ${accessToken}` : ''
         }
-        
-        return () => {
-            if (handle) handle.unsubscribe();
-        };
-    });
+    }));
+
+    return forward(operation);
 });

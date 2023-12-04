@@ -7,7 +7,7 @@ export const INSERT_POLL = gql`
             question
             createdAt
             closesAt
-            public
+            isPublic
             creator
             answers
             votes
@@ -22,7 +22,7 @@ export const UPDATE_POLL = gql`
             question
             createdAt
             closesAt
-            public
+            isPublic
             creator
             answers
             votes

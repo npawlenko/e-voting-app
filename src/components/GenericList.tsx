@@ -18,7 +18,7 @@ const GenericList = <T extends unknown>({
             alignItems="stretch"
         >
             {data.map((item) => (
-                <Grid item key={keyExtractor(item)} xs={12} md={3}>
+                <Grid item key={keyExtractor(item)} xs={12} md={6} xl={4} sx={{position: 'relative'}}>
                     {renderItem(item)}
                 </Grid>
             ))}

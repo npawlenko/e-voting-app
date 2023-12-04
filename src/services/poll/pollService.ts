@@ -9,7 +9,7 @@ async function queryWithPagination(query: DocumentNode, pageSize=10, pageNumber=
             variables: {pageSize, pageNumber}
         });
     } catch (error) {
-        console.error(error);
+        console.error('error: ', error);
         throw error;
     }
 } 

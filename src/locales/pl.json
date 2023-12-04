@@ -13,6 +13,9 @@
     "lastName": "Nazwisko",
     "myPolls": "Moje ankiety",
     "availablePolls": "Dostępne ankiety",
+    "createdAt": "Utworzona",
+    "closesAt": "Zamyka się",
+    "public": "Publiczne",
     "auth": {
         "loggedIn": "Pomyślnie zalogowałeś się na konto",
         "loggedOut": "Zostałeś wylogowany",
@@ -31,7 +34,8 @@
         "server": "Wystąpił błąd przy komunikacji z serwerem",
         "auth": {
             "notLoggedIn": "Musisz być zalogowany aby to zrobić!",
-            "alreadyLoggedIn": "Jesteś już zalogowany!"
+            "alreadyLoggedIn": "Jesteś już zalogowany!",
+            "sessionExpired": "Sesja logowania dobiegła końca. Zaloguj się ponownie"
         }
     }
   }
