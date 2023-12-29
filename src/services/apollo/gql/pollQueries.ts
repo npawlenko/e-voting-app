@@ -40,10 +40,15 @@ export const POLL = gql`
                 firstName
                 lastName
             }
+            answers {
+                id
+                answer
+            }
             question
             createdAt
             closesAt
             isPublic
+            votePlaced
         }
     }
 `;
@@ -56,6 +61,7 @@ export const POLL_BY_TOKEN = gql`
             createdAt
             closesAt
             isPublic
+            votePlaced
         }
     }
 `;

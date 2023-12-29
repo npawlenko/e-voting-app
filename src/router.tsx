@@ -1,10 +1,12 @@
 import App from "App";
 import ErrorPage from "components/ErrorPage";
-import Poll from "components/poll/Poll";
+import Poll from "features/poll/Poll";
 import Login from "features/auth/Login";
 import Register from "features/auth/Register";
 import Home from "features/home/Home";
 import { createBrowserRouter } from "react-router-dom";
+import EditPoll from "features/poll/form/EditPoll";
+import CreatePoll from "features/poll/form/CreatePoll";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
                     {
                         path: ":id",
                         element: <Poll />
+                    },
+                    {
+                        path: ":id/edit",
+                        element: <EditPoll />
+                    },
+                    {
+                        path: "create",
+                        element: <CreatePoll />
                     }
                 ]
             }

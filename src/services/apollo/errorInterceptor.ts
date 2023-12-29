@@ -13,8 +13,10 @@ const UNATHENTICATED = 401;
 export const errorInterceptor = onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
         for(let error of graphQLErrors) {
-            switch(error.extensions.code) {
+          console.log('error: ', error);
+            switch(error.extensions.errorCode) {
                 case UNATHENTICATED:
+                  console.log(operation);
                     if (operation.operationName === 'refreshToken') return;
 
                     const observable = new Observable<FetchResult<Record<string, any>>>(

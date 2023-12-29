@@ -2,8 +2,10 @@ import React from 'react';
 import { Typography, Card, CardContent, CardHeader, Divider, Avatar, Link } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
+import { formatDate } from 'utils/dateFormatter';
+import { PollAnswerData } from './Poll';
 
-export type Poll = {
+export type PollData = {
   id: number;
   question: string;
   createdAt: string;
@@ -14,35 +16,16 @@ export type Poll = {
     firstName: string;
     lastName: string;
   };
-  answers: {
-    id: string;
-    answer: string;
-  }[];
+  answers: PollAnswerData[];
   votes: {
     id: string;
     castedAt: string;
   }[];
+  votePlaced: boolean;
 };
 
 interface PollListItemProps {
-  poll: Poll;
-}
-
-function is12HourFormat(locale = 'en-US') {
-  const timeString = new Date().toLocaleTimeString(locale, { hour: 'numeric' });
-  return timeString.includes('AM') || timeString.includes('PM');
-}
-
-function formatDate(date: string, locale='en-US') {
-  return new Date(date).toLocaleString(locale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: undefined,
-    hour12: is12HourFormat(locale)
-  });
+  poll: PollData;
 }
 
 const PollListItem = ({ poll }: PollListItemProps) => {

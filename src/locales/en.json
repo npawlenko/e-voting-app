@@ -16,6 +16,12 @@
     "createdAt": "Created at",
     "closesAt": "Closes at",
     "public": "Public",
+    "confirmVoteTitle": "Confirm your vote",
+    "confirmVoteMessage": "Are you sure you want to vote for option {{answer}}? The vote cannot be changed later.",
+    "voteCasted": "Vote was successfully casted",
+    "alreadyVotedMessage": "Your vote on this poll was already casted. Wait for poll results",
+    "submitVote": "Vote",
+    "addPoll": "New poll",
     "auth": {
         "loggedIn": "Logged in successfully",
         "loggedOut": "Logged out successfully",

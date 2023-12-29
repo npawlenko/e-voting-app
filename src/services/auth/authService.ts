@@ -2,7 +2,7 @@ import { store } from "store";
 import { setAccessToken, setRefreshToken } from "features/auth/authSlice"
 import Cookies from "universal-cookie";
 import { apolloClient } from "services/apollo/apollo"
-import { LOGIN, LOGOUT, REGISTER, REFRESH_TOKEN } from "./gql/mutations"
+import { LOGIN, LOGOUT, REGISTER, REFRESH_TOKEN } from "../apollo/gql/authMutations"
 import { LoginPayload, RegisterPayload } from "./authTypes"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
 import { showAlert, showAlertAndLog } from "utils/errorUtils";
@@ -91,7 +91,7 @@ export const register = async (payload: RegisterPayload) => {
 export const refreshToken = async () => {
     const refreshToken = store.getState().auth.refreshToken;
     try {
-        const { data: { auth_refresh: { accessToken: newAccessToken, newRefreshToken } } } = await apolloClient.mutate({
+        const { data: { auth_refresh: { accessToken: newAccessToken, refreshToken: newRefreshToken } } } = await apolloClient.mutate({
             variables: {
                 refreshToken: refreshToken
             },
@@ -101,8 +101,6 @@ export const refreshToken = async () => {
         return newAccessToken;
     } catch (error) {
         updateStoreTokenState(null, null);
-        cookies.remove(ACCESS_TOKEN_COOKIE_NAME);
-        cookies.remove(REFRESH_TOKEN_COOKIE_NAME);
     }
 }
 
