@@ -37,12 +37,20 @@ export const POLL = gql`
         poll(poll_id: $pollId) {
             id
             creator {
+                id
                 firstName
                 lastName
             }
             answers {
                 id
                 answer
+            }
+            userGroup {
+                users {
+                    id
+                    firstName
+                    lastName
+                }
             }
             question
             createdAt

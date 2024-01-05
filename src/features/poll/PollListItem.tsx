@@ -6,7 +6,7 @@ import { formatDate } from 'utils/dateFormatter';
 import { PollAnswerData } from './Poll';
 
 export type PollData = {
-  id: number;
+  id: string;
   question: string;
   createdAt: string;
   closesAt: string;

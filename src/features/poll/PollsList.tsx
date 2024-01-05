@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { DocumentNode, useQuery } from '@apollo/client';
-import { POLLS } from 'services/apollo/gql/pollQueries';
 import { useTranslation } from 'react-i18next';
-import { Typography, Pagination, Button } from '@mui/material';
+import { Button } from '@mui/material';
 import { PollData } from './PollListItem';
 import GenericList from 'components/GenericList';
 import PollListItem from './PollListItem';
 import { showAlertAndLog } from 'utils/errorUtils';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 9;
 
 type PollsListProps = {
     query: DocumentNode 
@@ -23,7 +22,8 @@ const PollsList = ({query}: PollsListProps) => {
     const { loading, error, data } = useQuery(query, {
         variables: {
             pageSize: PAGE_SIZE, pageNumber: currentPage - 1
-        }
+        },
+        fetchPolicy: "network-only"
     });
 
     const loadMore = () => {
@@ -43,7 +43,7 @@ const PollsList = ({query}: PollsListProps) => {
             setPolls(prevPolls => currentPage === 1 ? [...d] : [...prevPolls, ...d]);
             setHasMore(d.length === PAGE_SIZE);
         }
-    }, [data]);
+    }, [data, currentPage]);
 
     if (loading) {
         return <p>Ładowanie...</p>;
@@ -58,7 +58,7 @@ const PollsList = ({query}: PollsListProps) => {
         <>
             <GenericList
                 data={polls}
-                keyExtractor={(poll: PollData) => poll?.id}
+                keyExtractor={(poll: PollData) => Number.parseInt(poll?.id)}
                 renderItem={(poll) => (
                     <PollListItem poll={poll} />
                 )}
@@ -70,7 +70,7 @@ const PollsList = ({query}: PollsListProps) => {
                         color="primary" 
                         onClick={loadMore}
                     >
-                        Załaduj więcej
+                        {t('loadMore')}
                     </Button>
                 </div>
             }

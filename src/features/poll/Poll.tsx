@@ -1,5 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { POLL } from "services/apollo/gql/pollQueries";
+import { useMutation } from "@apollo/client";
 import { Avatar, Box, Button, CardHeader, Container, Divider, FormControlLabel, Grid, Paper, Radio, RadioGroup, Typography } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -11,6 +10,8 @@ import { ErrorSeverity } from "features/error/ApplicationError";
 import { formatDate } from "utils/dateFormatter";
 import { usePoll } from "hooks/usePoll";
 import PollLoader from "components/PollLoader";
+import { useSelector } from "react-redux";
+import { RootState } from "store/store";
 
 export type PollAnswerData = {
   id: number,
@@ -19,6 +20,7 @@ export type PollAnswerData = {
 
 const Poll: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const userId: string|undefined = useSelector<RootState, string|undefined>(state => state.auth.user?.id);
   const { loading, poll } = usePoll({ pollId: id});
   const [selectedAnswer, setSelectedAnswer] = useState<number>(-1);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -50,6 +52,19 @@ const Poll: React.FC = () => {
   const hasVoted = poll?.votePlaced;
   const createdAt = formatDate(poll.createdAt, i18n.language);
   const closesAt = formatDate(poll.closesAt, i18n.language);
+  const isCreator = poll.creator?.id == userId;
+
+  const handleEdit = () => {
+    // Logika edycji ankiety
+  };
+
+  const handleDelete = () => {
+    // Logika usuwania ankiety
+  };
+
+  const handleEndPoll = () => {
+    // Logika zakończenia ankiety
+  };
 
   return (
     <Container>
@@ -60,6 +75,23 @@ const Poll: React.FC = () => {
       />
 
       <Divider/>
+
+      {isCreator && (
+        <>
+        <Box textAlign="center" sx={{ my: 3 }}>
+          <Button variant="contained" color="secondary" onClick={handleEdit} sx={{ mx: 1 }}>
+            {t('edit')}
+          </Button>
+          <Button variant="contained" color="error" onClick={handleDelete} sx={{ mx: 1 }}>
+            {t('delete')}
+          </Button>
+          <Button variant="contained" color="warning" onClick={handleEndPoll} sx={{ mx: 1 }}>
+            {t('endPoll')}
+          </Button>
+        </Box>
+        <Divider/>
+        </>
+      )}
 
       {hasVoted && (
         <Typography variant="body1" color="secondary" sx={{ my: 2 }}>

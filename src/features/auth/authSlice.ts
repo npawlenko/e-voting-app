@@ -15,22 +15,24 @@ export enum Role {
 }
 
 export type User = {
-    email: string;
-    fullName: string;
-    role: Role;
+    id: string
+    email: string
+    fullName: string
+    role: Role
 }
 
 export type CredentialsPayload = {
-    accessToken: string;
-    user: User;
+    accessToken: string
+    user: User
 }
 
 type TokenClaims = {
-    sub: string;
-    role: Role;
-    fullName: string;
-    exp: number;
-    iat: number;
+    id: string
+    sub: string
+    role: Role
+    fullName: string
+    exp: number
+    iat: number
 }
 
 const initialState: AuthState = {
@@ -60,7 +62,8 @@ const authSlice = createSlice({
                 ...claims
             };
             cookies.set(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
-                expires: new Date(claims.exp * 1000)
+                expires: new Date(claims.exp * 1000),
+                path: '/'
             });
         },
         setRefreshToken: (state, action: PayloadAction<string | null>) => {
@@ -78,7 +81,8 @@ const authSlice = createSlice({
                 ...claims
             };
             cookies.set(REFRESH_TOKEN_COOKIE_NAME, refreshToken, {
-                expires: new Date(claims.exp * 1000)
+                expires: new Date(claims.exp * 1000),
+                path: '/'
             });
         }
     }

@@ -4,13 +4,6 @@ export const INSERT_POLL = gql`
     mutation InsertPoll($poll: poll_input!) {
         insert_poll(poll: $poll) {
             id
-            question
-            createdAt
-            closesAt
-            isPublic
-            creator
-            answers
-            votes
         }
     }
 `;

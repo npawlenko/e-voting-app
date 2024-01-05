@@ -5,7 +5,7 @@ import { apolloClient } from "services/apollo/apollo"
 import { LOGIN, LOGOUT, REGISTER, REFRESH_TOKEN } from "../apollo/gql/authMutations"
 import { LoginPayload, RegisterPayload } from "./authTypes"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
-import { showAlert, showAlertAndLog } from "utils/errorUtils";
+import { showAlert } from "utils/errorUtils";
 import { ErrorSeverity } from "features/error/ApplicationError";
 
 export const ACCESS_TOKEN_COOKIE_NAME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_NAME;
@@ -60,7 +60,6 @@ export const login = async (payload: LoginPayload) => {
             mutation: LOGIN,
             variables: payload
         });
-        console.log(accessToken, refreshToken)
         updateStoreTokenState(accessToken, refreshToken);
         showAlert('auth.loggedIn', ErrorSeverity.SUCCESS);
     } catch (error) {

@@ -1,17 +1,18 @@
-import { useState, useCallback, useEffect } from 'react';
-import { useMutation, gql, useQuery, useLazyQuery } from '@apollo/client';
+import { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
 import { PollData } from 'features/poll/PollListItem';
 import { POLL } from 'services/apollo/gql/pollQueries';
 
 type UsePollHook = {
     pollId: string | undefined
-}
+};
 
 export const usePoll = ({ pollId: id }: UsePollHook) => {
     const [poll, setPoll] = useState<PollData | null>(null);
 
-    const { loading, data, error } = useQuery(POLL, {
-        variables: { pollId: id }
+    const { loading, data, error, refetch } = useQuery(POLL, {
+        variables: { pollId: id },
+        fetchPolicy: 'network-only'
     });
 
     useEffect(() => {
@@ -26,5 +27,9 @@ export const usePoll = ({ pollId: id }: UsePollHook) => {
         }
     }, [error]);
 
-    return { poll, loading };
+    const refreshPoll = () => {
+        refetch();
+    };
+
+    return { poll, loading, refreshPoll };
 };

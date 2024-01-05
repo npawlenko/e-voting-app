@@ -1,38 +1,62 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { TextField, Checkbox, FormControlLabel, Button, IconButton, Grid, List, ListItem, ListItemText, ListItemSecondaryAction } from '@mui/material';
+import React from 'react';
+import { Grid, TextField, Checkbox, FormControlLabel, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EmailList from './components/EmailList';
+import SystemUserList from './components/SystemUserList';
+import { PollInput, User } from 'utils/types';
+import { getFullName, isEmail } from 'utils/commonUtils';
+import { useNavigate } from 'react-router-dom';
+import { usePollForm } from 'hooks/usePollForm';
+import { SubmitHandler } from 'react-hook-form';
+import SelectedSystemUserList from './components/SelectedSystemUserList';
+import { t } from 'i18next';
 
-export type PollInput = {
-    question: string;
-    closesAt: Date;
-    nonSystemUsersEmails: string[];
-    systemUsers: string[];
-    isPublic: boolean;
-};
-
-type PollFormProps = {
+export type PollFormProps = {
     defaultValues?: PollInput;
     onSubmit: (data: PollInput) => void;
-};
-
-const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-const allSystemUsers = ["John Doe", "Jane Smith", "Alice Johnson", "Bob Brown"]; // Replace with your actual user data source
+}
 
 const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
-    const { register, handleSubmit, formState: { errors } } = useForm<PollInput>({
-        defaultValues,
-    });
-    const [emailList, setEmailList] = useState<string[]>(defaultValues?.nonSystemUsersEmails || []);
-    const [email, setEmail] = useState('');
-    const [systemUserSearch, setSystemUserSearch] = useState('');
-    const [selectedSystemUsers, setSelectedSystemUsers] = useState<string[]>(defaultValues?.systemUsers || []);
+    const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    errors,
+    loading,
+    error,
+    data,
+    emailList,
+    setEmailList,
+    email,
+    setEmail,
+    systemUserSearch,
+    setSystemUserSearch,
+    selectedSystemUsers,
+    setSelectedSystemUsers,
+    pollAnswers,
+    setPollAnswers,
+    newAnswer,
+    setNewAnswer
+  } = usePollForm({ defaultValues });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
     const handleAddEmail = () => {
-        if (email && emailRegex.test(email) && !emailList.includes(email)) {
+        if (email && isEmail(email) && !emailList.includes(email)) {
             setEmailList(prev => [...prev, email]);
             setEmail('');
         }
+    };
+
+    const handleAddAnswer = (newAnswer: string) => {
+        if (newAnswer && !pollAnswers.includes(newAnswer)) {
+            setPollAnswers(prevAnswers => [...prevAnswers, newAnswer]);
+        }
+    };
+
+    const handleRemoveAnswer = (answerToRemove: string) => {
+        setPollAnswers(pollAnswers.filter(answer => answer !== answerToRemove));
     };
 
     const handleRemoveEmail = (emailToRemove: string) => {
@@ -43,23 +67,30 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
         setSystemUserSearch(event.target.value);
     };
 
-    const handleAddSystemUser = (userName: string) => {
-        if (!selectedSystemUsers.includes(userName)) {
-            setSelectedSystemUsers(prevUsers => [...prevUsers, userName]);
+    const handleAddSystemUser = (user: User) => {
+        if (!selectedSystemUsers.includes(user)) {
+            setSelectedSystemUsers(prevUsers => [...prevUsers, user]);
         }
     };
 
-    const handleRemoveSystemUser = (userName: string) => {
-        setSelectedSystemUsers(selectedSystemUsers.filter(user => user !== userName));
+    const handleRemoveSystemUser = (user: User) => {
+        setSelectedSystemUsers(selectedSystemUsers.filter(user1 => getFullName(user1) !== getFullName(user)));
     };
 
-    const filteredSystemUsers = systemUserSearch ? allSystemUsers.filter(user => 
-        user.toLowerCase().includes(systemUserSearch.toLowerCase())) : [];
+    const filteredSystemUsers = systemUserSearch
+    ? data.users.filter(user =>
+        getFullName(user).toLowerCase().includes(systemUserSearch.toLowerCase())
+      )
+    : [];
 
-    const onSubmitForm = (data: PollInput) => {
+
+    const onSubmitForm: SubmitHandler<PollInput> = (data) => {
+        data.closesAt = new Date(data.closesAt);
         data.nonSystemUsersEmails = emailList;
-        data.systemUsers = selectedSystemUsers;
+        data.systemUsers = selectedSystemUsers.map(u => u.id);
+        data.answers = pollAnswers.map(a => ({answer: a}));
         onSubmit(data);
+        navigate("/");
     };
 
     return (
@@ -68,45 +99,52 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
-                        label="Pytanie Ankiety"
+                        label={t('question')}
                         {...register("question", { required: true })}
                         error={!!errors.question}
-                        helperText={errors.question ? "To pole jest wymagane" : ""}
+                        helperText={errors.question ? t('fieldRequired') : ""}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
                         type="datetime-local"
-                        label="Data Zamknięcia"
+                        label={t('closesAt')}
                         InputLabelProps={{ shrink: true }}
                         {...register("closesAt", { required: true })}
                         error={!!errors.closesAt}
-                        helperText={errors.closesAt ? "To pole jest wymagane" : ""}
+                        helperText={errors.closesAt ? t('fieldRequired') : ""}
                     />
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Dodaj e-mail"
-                        error={!!email && !emailRegex.test(email)}
-                        helperText={!!email && !emailRegex.test(email) ? "Niepoprawny format email" : ""}
+                        label={t('provideAnswer')}
+                        value={newAnswer}
+                        onChange={(e) => setNewAnswer(e.target.value)}
+                        placeholder={t('provideAnswer')}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <Button variant="contained" onClick={handleAddEmail} disabled={!emailRegex.test(email)}>
-                        Dodaj E-mail
+                    <Button 
+                        variant="contained" 
+                        onClick={() => { 
+                            handleAddAnswer(newAnswer);
+                            setNewAnswer('');
+                        }}
+                        disabled={!newAnswer} 
+                    >
+                        {t('addAnswer')}
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
                     <List dense>
-                        {emailList.map((email, index) => (
-                            <ListItem key={index} style={{ background: '#252525', borderRadius: '4px',  margin: '5px 0' }}>
-                                <ListItemText primary={email} />
+                        {pollAnswers.map((answer, index) => (
+                            <ListItem key={index} style={{ background: '#252525', borderRadius: '4px', margin: '5px 0' }}>
+                                <ListItemText primary={answer} />
                                 <ListItemSecondaryAction>
-                                    <IconButton edge="end" onClick={() => handleRemoveEmail(email)}>
+                                    <IconButton edge="end" onClick={() => handleRemoveAnswer(answer)}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </ListItemSecondaryAction>
@@ -114,54 +152,57 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                         ))}
                     </List>
                 </Grid>
+
 
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        label="Search System Users"
-                        value={systemUserSearch}
-                        onChange={handleSystemUserSearchChange}
+                        label={t('pollEmails')}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={t('provideEmail')}
+                        error={!!email && !isEmail(email)}
+                        helperText={!!email && !isEmail(email) ? t('invalidEmail') : ""}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <List>
-                        {filteredSystemUsers.map((user, index) => (
-                            <ListItem button key={index} onClick={() => handleAddSystemUser(user)}>
-                                <ListItemText primary={user} />
-                            </ListItem>
-                        ))}
-                    </List>
+                    <Button 
+                        variant="contained" 
+                        onClick={handleAddEmail}
+                        disabled={!isEmail(email)}
+                    >
+                        {t('addEmail')}
+                    </Button>
                 </Grid>
+                <EmailList emailList={emailList} handleRemoveEmail={handleRemoveEmail} />
 
-                <Grid item xs={12}>
-                    <List dense>
-                        {selectedSystemUsers.map((user, index) => (
-                            <ListItem key={index} style={{ background: '#252525', borderRadius: '4px', margin: '5px 0' }}>
-                                <ListItemText primary={user} />
-                                <ListItemSecondaryAction>
-                                    <IconButton edge="end" onClick={() => handleRemoveSystemUser(user)}>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>
-                        ))}
-                    </List>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        fullWidth
+                        label={t('searchUsers')}
+                        value={systemUserSearch}
+                        onChange={handleSystemUserSearchChange}
+                        placeholder={t('provideName')}
+                    />
                 </Grid>
-                
+                <SystemUserList users={filteredSystemUsers} handleAddSystemUser={handleAddSystemUser} />
+
+                <SelectedSystemUserList selectedSystemUsers={selectedSystemUsers} handleRemoveSystemUser={handleRemoveSystemUser} />
+
                 <Grid item xs={12}>
                     <FormControlLabel
                         control={<Checkbox {...register("isPublic")} />}
-                        label="Publiczna?"
+                        label={t('public')}
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <Button type="submit" variant="contained">
-                        Zapisz
+                        {t('submit')}
                     </Button>
                 </Grid>
             </Grid>
         </form>
     );
-};
+}
 
 export default PollForm;
