@@ -1,46 +1,58 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, TextField, Checkbox, FormControlLabel, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EmailList from './components/EmailList';
 import SystemUserList from './components/SystemUserList';
-import { PollInput, User } from 'utils/types';
+import { PollData, User } from 'utils/types';
 import { getFullName, isEmail } from 'utils/commonUtils';
 import { useNavigate } from 'react-router-dom';
 import { usePollForm } from 'hooks/usePollForm';
-import { SubmitHandler } from 'react-hook-form';
+import { Controller, SubmitHandler } from 'react-hook-form';
 import SelectedSystemUserList from './components/SelectedSystemUserList';
 import { t } from 'i18next';
 
 export type PollFormProps = {
-    defaultValues?: PollInput;
-    onSubmit: (data: PollInput) => void;
+    defaultValues?: PollData | undefined;
+    onSubmit: (data: PollData) => void;
 }
 
 const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
     const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    errors,
-    loading,
-    error,
-    data,
-    emailList,
-    setEmailList,
-    email,
-    setEmail,
-    systemUserSearch,
-    setSystemUserSearch,
-    selectedSystemUsers,
-    setSelectedSystemUsers,
-    pollAnswers,
-    setPollAnswers,
-    newAnswer,
-    setNewAnswer
-  } = usePollForm({ defaultValues });
+    const {
+        control,
+        setValue,
+        register,
+        handleSubmit,
+        errors,
+        loading,
+        error,
+        userData,
+        emailList,
+        setEmailList,
+        email,
+        setEmail,
+        systemUserSearch,
+        setSystemUserSearch,
+        selectedSystemUsers,
+        setSelectedSystemUsers,
+        pollAnswers,
+        setPollAnswers,
+        newAnswer,
+        setNewAnswer
+    } = usePollForm({ defaultValues });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+    useEffect(() => {
+        if (defaultValues) {
+            setValue("question", defaultValues.question);
+            setValue("closesAt", defaultValues.closesAt.slice(0, 16));
+            setValue("isPublic", defaultValues.isPublic);
+            setSelectedSystemUsers(defaultValues.systemUsers);
+            setPollAnswers(defaultValues.answers.map(a => a.answer));
+        }
+    }, [defaultValues, setValue, setPollAnswers, setSelectedSystemUsers]);
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error.message}</p>;
 
     const handleAddEmail = () => {
         if (email && isEmail(email) && !emailList.includes(email)) {
@@ -78,17 +90,16 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
     };
 
     const filteredSystemUsers = systemUserSearch
-    ? data.users.filter(user =>
+    ? userData.users.filter(user =>
         getFullName(user).toLowerCase().includes(systemUserSearch.toLowerCase())
       )
     : [];
 
 
-    const onSubmitForm: SubmitHandler<PollInput> = (data) => {
-        data.closesAt = new Date(data.closesAt);
+    const onSubmitForm: SubmitHandler<PollData> = (data) => {
         data.nonSystemUsersEmails = emailList;
-        data.systemUsers = selectedSystemUsers.map(u => u.id);
-        data.answers = pollAnswers.map(a => ({answer: a}));
+        data.systemUsers = selectedSystemUsers;
+        data.answers = pollAnswers.map(a => ({id: '', answer: a}));
         onSubmit(data);
         navigate("/");
     };
@@ -99,7 +110,8 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
-                        label={t('question')}
+                        label={t('poll.question')}
+                        InputLabelProps={{ shrink: true }}
                         {...register("question", { required: true })}
                         error={!!errors.question}
                         helperText={errors.question ? t('fieldRequired') : ""}
@@ -109,7 +121,7 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                     <TextField
                         fullWidth
                         type="datetime-local"
-                        label={t('closesAt')}
+                        label={t('poll.closesAt')}
                         InputLabelProps={{ shrink: true }}
                         {...register("closesAt", { required: true })}
                         error={!!errors.closesAt}
@@ -120,10 +132,10 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        label={t('provideAnswer')}
+                        label={t('poll.answer.provide')}
                         value={newAnswer}
                         onChange={(e) => setNewAnswer(e.target.value)}
-                        placeholder={t('provideAnswer')}
+                        placeholder={t('poll.answer.provide')}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -135,7 +147,7 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                         }}
                         disabled={!newAnswer} 
                     >
-                        {t('addAnswer')}
+                        {t('poll.answer.add')}
                     </Button>
                 </Grid>
                 <Grid item xs={12}>
@@ -157,10 +169,10 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        label={t('pollEmails')}
+                        label={t('poll.nonSystemUsers.email')}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder={t('provideEmail')}
+                        placeholder={t('poll.nonSystemUsers.provideEmail')}
                         error={!!email && !isEmail(email)}
                         helperText={!!email && !isEmail(email) ? t('invalidEmail') : ""}
                     />
@@ -171,7 +183,7 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                         onClick={handleAddEmail}
                         disabled={!isEmail(email)}
                     >
-                        {t('addEmail')}
+                        {t('poll.nonSystemUsers.addEmail')}
                     </Button>
                 </Grid>
                 <EmailList emailList={emailList} handleRemoveEmail={handleRemoveEmail} />
@@ -179,10 +191,10 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                 <Grid item xs={12} sm={6}>
                     <TextField
                         fullWidth
-                        label={t('searchUsers')}
+                        label={t('poll.systemUsers.search')}
                         value={systemUserSearch}
                         onChange={handleSystemUserSearchChange}
-                        placeholder={t('provideName')}
+                        placeholder={t('poll.systemUsers.provideName')}
                     />
                 </Grid>
                 <SystemUserList users={filteredSystemUsers} handleAddSystemUser={handleAddSystemUser} />
@@ -190,12 +202,20 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                 <SelectedSystemUserList selectedSystemUsers={selectedSystemUsers} handleRemoveSystemUser={handleRemoveSystemUser} />
 
                 <Grid item xs={12}>
-                    <FormControlLabel
-                        control={<Checkbox {...register("isPublic")} />}
-                        label={t('public')}
-                    />
+                <Controller
+                    name="isPublic"
+                    control={control}
+                    defaultValue={defaultValues?.isPublic || false}
+                    render={({ field }) => (
+                        <FormControlLabel
+                            control={<Checkbox {...register("isPublic")} checked={field.value} />}
+                            label={t('poll.public')}
+                        />
+                    )}
+                />
+                    
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sx={{textAlign: 'center'}}>
                     <Button type="submit" variant="contained">
                         {t('submit')}
                     </Button>

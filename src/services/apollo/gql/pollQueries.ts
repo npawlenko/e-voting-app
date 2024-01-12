@@ -41,22 +41,25 @@ export const POLL = gql`
                 firstName
                 lastName
             }
-            answers {
+            systemUsers {
                 id
-                answer
-            }
-            userGroup {
-                users {
-                    id
-                    firstName
-                    lastName
-                }
+                firstName
+                lastName
             }
             question
             createdAt
             closesAt
             isPublic
             votePlaced
+            answers {
+                id
+                answer
+            }
+            votes {
+                answer {
+                    id
+                }
+            }
         }
     }
 `;

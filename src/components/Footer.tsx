@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Container, Link, Paper, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Paper, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import { US, PL } from 'country-flag-icons/react/3x2'
 import { useTranslation } from 'react-i18next';
@@ -26,13 +26,8 @@ const Footer = () => {
       <AppBar position="static" color="primary">
         <Container maxWidth="lg">
           <Toolbar>
-            <Typography variant="body1" color="inherit">
-              {t('footer.copyright', { year: new Date().getFullYear() })}
-            </Typography>
             <Typography variant="body1" color="inherit" sx={{ flexGrow: 1 }}>
-              <Link href="/polityka-prywatnosci" color="inherit">
-                {t('footer.privacyPolicy')}
-              </Link>
+              {t('footer.copyright', { year: new Date().getFullYear() })}
             </Typography>
             <FormControl style={{ marginLeft: '10px' }}>
               <InputLabel id="language-select-label">{t('footer.language')}</InputLabel>

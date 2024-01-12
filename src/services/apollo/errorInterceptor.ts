@@ -1,52 +1,68 @@
-import { FetchResult, Observable } from "@apollo/client";
-import { onError } from "@apollo/client/link/error";
-import { GraphQLError } from "graphql";
-import { refreshToken } from "services/auth";
-import { showAlert } from "utils/errorUtils";
-import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "services/auth/authService";
-import Cookies from "universal-cookie";
+  import { FetchResult, Observable } from "@apollo/client";
+  import { onError } from "@apollo/client/link/error";
+  import { GraphQLError } from "graphql";
+  import { refreshToken } from "services/auth";
+  import { showAlert } from "utils/errorUtils";
+  import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME } from "services/auth/authService";
+  import Cookies from "universal-cookie";
 
-const cookies = new Cookies();
+  const cookies = new Cookies();
 
-const UNATHENTICATED = 401;
+  const UNATHENTICATED = 401;
 
-export const errorInterceptor = onError(({ graphQLErrors, networkError, operation, forward }) => {
+  function stopErrorPropagation() {
+    return new Observable<FetchResult<Record<string, any>>>(() => {});
+  }
+
+  export const errorInterceptor = onError(({ graphQLErrors, networkError, operation, forward }) => {
     if (graphQLErrors) {
         for(let error of graphQLErrors) {
-          console.log('error: ', error);
             switch(error.extensions.errorCode) {
-                case UNATHENTICATED:
-                  console.log(operation);
-                    if (operation.operationName === 'refreshToken') return;
+              case UNATHENTICATED:
+                if (operation.operationName === 'refreshToken') return;
 
-                    const observable = new Observable<FetchResult<Record<string, any>>>(
-                        (observer) => {
-                          (async () => {
-                            try {
-                              const accessToken = await refreshToken();
-          
-                              if (!accessToken) {
-                                cookies.remove(REFRESH_TOKEN_COOKIE_NAME);
-                                cookies.remove(ACCESS_TOKEN_COOKIE_NAME);
-                                throw new GraphQLError('Could not refresh token');
-                              }
-          
-                              const subscriber = {
-                                next: observer.next.bind(observer),
-                                error: observer.error.bind(observer),
-                                complete: observer.complete.bind(observer),
-                              };
-          
-                              forward(operation).subscribe(subscriber);
-                            } catch (err) {
-                              observer.error(err);
-                            }
-                          })();
+                const observable = new Observable<FetchResult<Record<string, any>>>(
+                    (observer) => {
+                      (async () => {
+                        try {
+                          const accessToken = await refreshToken();
+      
+                          if (!accessToken) {
+                            cookies.remove(REFRESH_TOKEN_COOKIE_NAME);
+                            cookies.remove(ACCESS_TOKEN_COOKIE_NAME);
+                            throw new GraphQLError('Could not refresh token');
+                          }
+
+                          operation.setContext(({ headers = {} }) => ({
+                            headers: {
+                              ...headers,
+                              authorization: `Bearer ${accessToken}`,
+                            },
+                          }));
+      
+                          const subscriber = {
+                            next: observer.next.bind(observer),
+                            error: observer.error.bind(observer),
+                            complete: observer.complete.bind(observer),
+                          };
+      
+                          forward(operation).subscribe(subscriber);
+                        } catch (err) {
+                          observer.error(err);
                         }
-                      );
-                    return observable;
+                      })();
+                    }
+                  );
+                return observable;
+              default:
+                showAlert('error.client');
+                console.error(error);
+                return stopErrorPropagation();
             }
         }
     }
-    if (networkError) showAlert('error.server');
+    if (networkError) {
+      showAlert('error.server');
+      return stopErrorPropagation();
+    }
   });

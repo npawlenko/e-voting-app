@@ -32,7 +32,7 @@ const Register = () => {
     <Container maxWidth="xs">
       <Paper elevation={0} style={{ padding: "20px" }}>
         <Typography variant="h4" align="center" gutterBottom>
-          {t('register')}
+          {t('auth.register')}
         </Typography>
         <form onSubmit={onSubmit}>
           <Controller
@@ -42,7 +42,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label={t('firstName')}
+                label={t('auth.fields.firstName')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -58,7 +58,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label={t('lastName')}
+                label={t('auth.fields.lastName')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -74,7 +74,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label={t('emailAddress')}
+                label={t('auth.fields.email')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -90,7 +90,7 @@ const Register = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label={t('password')}
+                label={t('auth.fields.password')}
                 type="password"
                 variant="outlined"
                 fullWidth
@@ -101,7 +101,7 @@ const Register = () => {
           {errors.password && <p>{errors.password.message}</p>}
 
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            {t('register')}
+            {t('auth.register')}
           </Button>
         </form>
       </Paper>

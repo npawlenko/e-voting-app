@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import { SubmitHandler, UseFormRegister, useForm } from 'react-hook-form';
+import { Control, SubmitHandler, UseFormRegister, UseFormSetValue, useForm } from 'react-hook-form';
 import { useQuery } from '@apollo/client';
 import { USERS } from 'services/apollo/gql/userQueries';
-import { PollInput, User } from 'utils/types';
+import { PollData, User } from 'utils/types';
 
 type UsePollFormHook = {
-    defaultValues: PollInput | undefined
+    defaultValues: PollData | undefined
 }
 
 export type UsePollFormReturn = {
-    register: UseFormRegister<PollInput>
-    handleSubmit: (handler: SubmitHandler<PollInput>) => (e?: React.BaseSyntheticEvent) => Promise<void>;
+    control: Control<PollData, any>
+    setValue: UseFormSetValue<PollData>
+    register: UseFormRegister<PollData>
+    handleSubmit: (handler: SubmitHandler<PollData>) => (e?: React.BaseSyntheticEvent) => Promise<void>;
     errors: ReturnType<typeof useForm>['formState']['errors']
     loading: boolean
     error: any
-    data: { users: User[] }
+    userData: { users: User[] }
     emailList: string[]
     setEmailList: React.Dispatch<React.SetStateAction<string[]>>
     email: string
@@ -30,8 +32,8 @@ export type UsePollFormReturn = {
 }
 
 export const usePollForm = ({ defaultValues }: UsePollFormHook): UsePollFormReturn => {
-  const { register, handleSubmit, formState: { errors } } = useForm({ defaultValues });
-  const { data, loading, error } = useQuery(USERS);
+  const { register, handleSubmit, formState: { errors }, control, setValue } = useForm({ defaultValues });
+  const { data: userData, loading, error } = useQuery(USERS);
 
   const [emailList, setEmailList] = useState<string[]>(defaultValues?.nonSystemUsersEmails || []);
   const [email, setEmail] = useState('');
@@ -41,12 +43,14 @@ export const usePollForm = ({ defaultValues }: UsePollFormHook): UsePollFormRetu
   const [newAnswer, setNewAnswer] = useState('');
 
   return {
+    control,
+    setValue,
     register,
     handleSubmit,
     errors,
     loading,
     error,
-    data,
+    userData,
     emailList,
     setEmailList,
     email,

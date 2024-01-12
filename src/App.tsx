@@ -13,8 +13,8 @@ const darkTheme = createTheme({
       main: '#2196f3',
     },
     secondary: {
-      main: '#ff4081',
-    },
+      main: '#ea8f8f',
+    }
   },
 });
 

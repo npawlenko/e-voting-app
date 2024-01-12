@@ -1,15 +1,20 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 import HomeLoggedIn from './HomeLoggedIn';
 import HomeNotLoggedIn from './HomeNotLoggedIn';
+import { Role } from 'features/auth/authSlice';
+import AdminHome from './AdminHome';
 
 const Home = () => {
-  const { t } = useTranslation();
   const isLoggedIn = useSelector((state: RootState) => state.auth.accessToken !== null);
+  const isAdmin = useSelector((state: RootState) => state.auth.user?.role === Role.ADMIN)
 
-  return isLoggedIn ? <HomeLoggedIn /> : <HomeNotLoggedIn />
+  if (isLoggedIn) {
+    return isAdmin ? <AdminHome /> : <HomeLoggedIn />;
+  } else {
+    return <HomeNotLoggedIn />;
+  }
 };
 
 export default Home;

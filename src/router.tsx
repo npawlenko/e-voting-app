@@ -39,7 +39,7 @@ const router = createBrowserRouter([
                         element: <Poll />
                     },
                     {
-                        path: ":id/edit",
+                        path: "edit/:id",
                         element: <EditPoll />
                     },
                     {

@@ -1,45 +1,84 @@
 {
-    "welcome": "Witaj w VoteCampus",
+    "pageTitle": "Głosowania",
+    "welcome": "Witaj w aplikacji do głosowań",
     "systemDescription": "System wspomagający administrację uczelni poprzez elektroniczne głosowania.",
-    "homePage": "Strona główna",
-    "register": "Rejestracja",
-    "registerButton": "Zarejestruj się",
-    "login": "Logowanie",
-    "loginButton": "Zaloguj się",
-    "logout": "Wyloguj się",
-    "emailAddress": "Adres e-mail",
-    "password": "Hasło",
-    "firstName": "Imię",
-    "lastName": "Nazwisko",
-    "myPolls": "Moje ankiety",
-    "availablePolls": "Dostępne ankiety",
-    "pollEmails": "Autoryzuj e-mail",
-    "question": "Pytanie",
-    "addAnswer": "Dodaj odpowiedź",
-    "provideAnswer": "Wprowadź odpowiedź",
-    "addEmail": "Dodaj e-mail",
-    "searchUsers": "Wyszukaj użytkownika",
-    "public": "Czy publiczna",
-    "edit": "Edytuj",
-    "delete": "Usuń",
-    "endPoll": "Zakończ",
-    "createdAt": "Utworzona",
-    "closesAt": "Zamyka się",
-    "confirmVoteTitle": "Potwierdzenie głosu",
-    "confirmVoteMessage": "Czy na pewno chcesz zagłosować na opcję {{answer}}? Głosu później nie można zmienić.",
-    "voteCasted": "Głos został pomyślnie oddany",
-    "alreadyVotedMessage": "Twój głos w tej ankiecie został już oddany. Poczekaj na wyniki ankiety",
-    "submitVote": "Zagłosuj",
-    "addPoll": "Nowa ankieta",
     "loadMore": "Załaduj więcej",
+    "noPollsFound": "Nie znaleziono pasujących ankiet",
+    "fieldRequired": "Te pole jest obowiązkowe",
+    "submit": "Zapisz",
+    "home": {
+        "myPolls": "Utworzone przeze mnie ankiety",
+        "availablePolls": "Dostępne ankiety"
+    },
+    "dialog": {
+        "cancel": "Anuluj",
+        "confirm": "Potwierdź"
+    },
+    "vote": {
+        "submit": "Zagłosuj",
+        "castedSuccessfully": "Głos został pomyślnie oddany",
+        "alreadyVoted": "Już zagłosowałeś w tej ankiecie. Po zakończeniu ankiety wyświetlą się tutaj jej wyniki.",
+        "confirm": {
+            "message": "Czy jesteś pewien, że chcesz zagłosować na opcję \"{{answer}}\"? Głosu nie można później zmienić.",
+            "title": "Potwierdzenie głosu"
+        }
+    },
+    "poll": {
+        "created": "Pomyślnie utworzono nową ankietę",
+        "edited": "Pomyślnie edytowano istniejącą ankietę",
+        "add": "Nowa ankieta",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "question": "Pytanie",
+        "closesAt": "Zamyka się",
+        "createdAt": "Utworzona",
+        "public": "Czy publiczna",
+        "submit": "Dodaj ankietę",
+        "close": {
+            "close": "Zakończ",
+            "confirm": {
+                "message": "Czy jesteś pewien, że chcesz zamknąć tą ankietę?",
+                "title": "Zamykanie ankiety"
+            }
+        },
+        "answer": {
+            "provide": "Wprowadź możliwą odpowiedź",
+            "add": "Dodaj odpowiedź"
+        },
+        "nonSystemUsers": {
+            "email": "Adres e-mail",
+            "provideEmail": "Wprowadź adres e-mail",
+            "addEmail": "Dodaj e-mail"
+        },
+        "systemUsers": {
+            "search": "Wyszukaj użytkownika",
+            "provideName": "Wprowadź nazwę użytkownika"
+        },
+        "chart": {
+            "voteCount": "Liczba głosów"
+        }
+    },
+    "navigation": {
+        "home": "Strona główna",
+        "register": "Zarejestruj się",
+        "login": "Zaloguj się",
+        "logout": "Wyloguj się"
+    },
     "auth": {
         "loggedIn": "Pomyślnie zalogowałeś się na konto",
         "loggedOut": "Zostałeś wylogowany",
-        "registered": "Twoje konto zostało pomyślnie zarejestrowane"
+        "registered": "Twoje konto zostało pomyślnie zarejestrowane",
+        "login": "Zaloguj się",
+        "register": "Zarejestruj się",
+        "fields": {
+            "email": "Adres e-mail",
+            "password": "Hasło",
+            "firstName": "Imię",
+            "lastName": "Nazwisko"
+        }
     },
     "footer": {
-        "copyright": "© {{year}} VoteCampus",
-        "privacyPolicy": "Polityka Prywatności",
+        "copyright": "© {{year}} ",
         "language": "Język"
     },
     "languages": {
@@ -47,7 +86,8 @@
         "pl": "Polski"
     },
     "error": {
-        "server": "Wystąpił błąd przy komunikacji z serwerem",
+        "server": "Nie można połączyć się z serwerem. Spróbuj ponownie później",
+        "client": "Wystąpił błąd przy komunikacji z serwerem",
         "auth": {
             "notLoggedIn": "Musisz być zalogowany aby to zrobić!",
             "alreadyLoggedIn": "Jesteś już zalogowany!",

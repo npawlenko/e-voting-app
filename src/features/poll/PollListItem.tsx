@@ -2,27 +2,10 @@ import React from 'react';
 import { Typography, Card, CardContent, CardHeader, Divider, Avatar, Link } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
-import { formatDate } from 'utils/dateFormatter';
-import { PollAnswerData } from './Poll';
+import { cutTimeZone, formatDate } from 'utils/dateFormatter';
+import { PollData } from 'utils/types';
 
-export type PollData = {
-  id: string;
-  question: string;
-  createdAt: string;
-  closesAt: string;
-  isPublic: boolean;
-  creator: {
-    id: string;
-    firstName: string;
-    lastName: string;
-  };
-  answers: PollAnswerData[];
-  votes: {
-    id: string;
-    castedAt: string;
-  }[];
-  votePlaced: boolean;
-};
+
 
 interface PollListItemProps {
   poll: PollData;
@@ -30,8 +13,8 @@ interface PollListItemProps {
 
 const PollListItem = ({ poll }: PollListItemProps) => {
   const { t, i18n } = useTranslation();
-  const createdAt = formatDate(poll.createdAt, i18n.language);
-  const closesAt = formatDate(poll.closesAt, i18n.language);
+  const createdAt = formatDate(cutTimeZone(poll.createdAt), i18n.language);
+  const closesAt = formatDate(cutTimeZone(poll.closesAt), i18n.language);
 
   return (
     <Link component={RouterLink} to={`/poll/${poll.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -39,7 +22,7 @@ const PollListItem = ({ poll }: PollListItemProps) => {
         <CardHeader
           avatar={<Avatar>{`${poll.creator.firstName.charAt(0).toUpperCase()}${poll.creator.lastName.charAt(0).toUpperCase()}`}</Avatar>}
           title={poll.creator.firstName + " " + poll.creator.lastName}
-          subheader={<>{t('createdAt')}: {createdAt} <br/> {t('closesAt')}: {closesAt}</>}
+          subheader={<>{t('poll.createdAt')}: {createdAt} <br/> {t('poll.closesAt')}: {closesAt}</>}
         />
         <Divider />
         <CardContent>

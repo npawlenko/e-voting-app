@@ -12,14 +12,13 @@ export const UPDATE_POLL = gql`
     mutation UpdatePoll($pollId: ID!, $object: poll_input!) {
         update_poll(poll_id: $pollId, object: $object) {
             id
-            question
-            createdAt
-            closesAt
-            isPublic
-            creator
-            answers
-            votes
         }
+    }
+`;
+
+export const CLOSE_POLL = gql`
+    mutation ClosePoll($pollId: ID!) {
+        close_poll(poll_id: $pollId)
     }
 `;
 

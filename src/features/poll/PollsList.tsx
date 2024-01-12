@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { DocumentNode, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
-import { PollData } from './PollListItem';
 import GenericList from 'components/GenericList';
 import PollListItem from './PollListItem';
 import { showAlertAndLog } from 'utils/errorUtils';
+import { PollData } from 'utils/types';
 
 const PAGE_SIZE = 9;
 
@@ -22,8 +22,7 @@ const PollsList = ({query}: PollsListProps) => {
     const { loading, error, data } = useQuery(query, {
         variables: {
             pageSize: PAGE_SIZE, pageNumber: currentPage - 1
-        },
-        fetchPolicy: "network-only"
+        }
     });
 
     const loadMore = () => {

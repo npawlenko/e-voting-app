@@ -37,17 +37,13 @@ export const logout = async () => {
         throw new Error('error.auth.notLoggedIn');
     }
 
-    try {
-        await apolloClient.mutate({
-            mutation: LOGOUT
-        });
-    } catch (error) {
-        throw error;
-    } finally {
-        cookies.remove(ACCESS_TOKEN_COOKIE_NAME);
-        cookies.remove(REFRESH_TOKEN_COOKIE_NAME);
-        updateStoreTokenState(null, null);
-    }
+    await apolloClient.mutate({
+        mutation: LOGOUT
+    });
+
+    cookies.remove(ACCESS_TOKEN_COOKIE_NAME);
+    cookies.remove(REFRESH_TOKEN_COOKIE_NAME);
+    updateStoreTokenState(null, null);
 }
 
 export const login = async (payload: LoginPayload) => {
