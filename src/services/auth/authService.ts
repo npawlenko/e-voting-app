@@ -1,24 +1,30 @@
 import { store } from "store";
-import { setAccessToken } from "features/auth/authSlice"
+import { setAccessToken, setRefreshToken } from "features/auth/authSlice"
 import Cookies from "universal-cookie";
 import { apolloClient } from "services/apollo/apollo"
-import { LOGIN_MUTATION, LOGOUT_MUTATION, REGISTER_MUTATION, REFRESH_TOKEN_MUTATION } from "./gql/mutations"
+import { LOGIN, LOGOUT, REGISTER, REFRESH_TOKEN } from "../apollo/gql/authMutations"
 import { LoginPayload, RegisterPayload } from "./authTypes"
 import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
-import { showAlert, showAlertAndLog } from "utils/errorUtils";
+import { showAlert } from "utils/errorUtils";
 import { ErrorSeverity } from "features/error/ApplicationError";
 
-const ACCESS_TOKEN_COOKIE_NAME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_NAME;
-const ACCESS_TOKEN_COOKIE_LIFETIME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_LIFETIME;
+export const ACCESS_TOKEN_COOKIE_NAME: any = process.env.REACT_APP_ACCESS_TOKEN_COOKIE_NAME;
+export const REFRESH_TOKEN_COOKIE_NAME: any = process.env.REACT_APP_REFRESH_TOKEN_COOKIE_NAME;
 
 const cookies = new Cookies();
 
 
-export const initializeAuthContext = (appStore: ToolkitStore) => {
-    const accessToken = cookies.get(ACCESS_TOKEN_COOKIE_NAME);
+export const initializeAuthContext = async (appStore: ToolkitStore) => {
+    const accessTokenValue = cookies.get(ACCESS_TOKEN_COOKIE_NAME);
+    const refreshTokenValue = cookies.get(REFRESH_TOKEN_COOKIE_NAME);
     
-    if (accessToken) {
-        appStore.dispatch(setAccessToken(accessToken));
+    if(refreshTokenValue) {
+        appStore.dispatch(setRefreshToken(refreshTokenValue));
+        if (accessTokenValue) {
+            appStore.dispatch(setAccessToken(accessTokenValue));
+        } else {
+            refreshToken();
+        }
     }
 }
 
@@ -29,18 +35,15 @@ export const isLoggedIn = (): boolean => {
 export const logout = async () => {
     if (!isLoggedIn()) {
         throw new Error('error.auth.notLoggedIn');
-        return;
     }
 
-    try {
-        await apolloClient.mutate({
-            mutation: LOGOUT_MUTATION
-        });
-        updateAccessToken(null);
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
+    await apolloClient.mutate({
+        mutation: LOGOUT
+    });
+
+    cookies.remove(ACCESS_TOKEN_COOKIE_NAME);
+    cookies.remove(REFRESH_TOKEN_COOKIE_NAME);
+    updateStoreTokenState(null, null);
 }
 
 export const login = async (payload: LoginPayload) => {
@@ -49,11 +52,11 @@ export const login = async (payload: LoginPayload) => {
     }
 
     try {
-        const { data: { auth_login: { accessToken } } } = await apolloClient.mutate({
-            mutation: LOGIN_MUTATION,
+        const { data: { auth_login: { accessToken, refreshToken } } } = await apolloClient.mutate({
+            mutation: LOGIN,
             variables: payload
         });
-        updateAccessToken(accessToken);
+        updateStoreTokenState(accessToken, refreshToken);
         showAlert('auth.loggedIn', ErrorSeverity.SUCCESS);
     } catch (error) {
         console.error("Error when trying to login: ", error);
@@ -67,13 +70,13 @@ export const register = async (payload: RegisterPayload) => {
     }
 
     try {
-        const { data: { auth_register: { accessToken } } } = await apolloClient.mutate({
-            mutation: REGISTER_MUTATION,
+        const { data: { auth_register: { accessToken, refreshToken } } } = await apolloClient.mutate({
+            mutation: REGISTER,
             variables: {
                 object: payload
             }
         });
-        updateAccessToken(accessToken);
+        updateStoreTokenState(accessToken, refreshToken);
     } catch (error) {
         console.error("Error when trying to register: ", error);
         throw error;
@@ -81,32 +84,22 @@ export const register = async (payload: RegisterPayload) => {
 }
 
 export const refreshToken = async () => {
+    const refreshToken = store.getState().auth.refreshToken;
     try {
-        const { data: { auth_refresh: { accessToken } } } = await apolloClient.mutate({
-            mutation: REFRESH_TOKEN_MUTATION
+        const { data: { auth_refresh: { accessToken: newAccessToken, refreshToken: newRefreshToken } } } = await apolloClient.mutate({
+            variables: {
+                refreshToken: refreshToken
+            },
+            mutation: REFRESH_TOKEN
         });
-        updateAccessToken(accessToken);
+        updateStoreTokenState(newAccessToken, newRefreshToken);
+        return newAccessToken;
     } catch (error) {
-        console.error("Error when trying to refresh: ", error);
-        throw error;
+        updateStoreTokenState(null, null);
     }
 }
 
-function setAccessTokenCookie(accessToken: string) {
-    const cookieExpirationDate = new Date();
-    cookieExpirationDate.setSeconds(cookieExpirationDate.getSeconds() + ACCESS_TOKEN_COOKIE_LIFETIME);
-    cookies.set(ACCESS_TOKEN_COOKIE_NAME, accessToken, {
-        expires: cookieExpirationDate,
-    });
-}
-
-function updateAccessToken(accessToken: string | null) {
+const updateStoreTokenState = (accessToken: string | null, refreshToken: string | null) => {
+    store.dispatch(setRefreshToken(refreshToken));
     store.dispatch(setAccessToken(accessToken));
-
-    if (accessToken) {
-        setAccessTokenCookie(accessToken);
-    }
-    else {
-        cookies.remove(ACCESS_TOKEN_COOKIE_NAME);
-    }
 }

@@ -1,29 +1,20 @@
 import React from 'react';
-import { Container, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { RootState } from 'store/store';
+import HomeLoggedIn from './HomeLoggedIn';
+import HomeNotLoggedIn from './HomeNotLoggedIn';
+import { Role } from 'features/auth/authSlice';
+import AdminHome from './AdminHome';
 
 const Home = () => {
-  const { t } = useTranslation();
+  const isLoggedIn = useSelector((state: RootState) => state.auth.accessToken !== null);
+  const isAdmin = useSelector((state: RootState) => state.auth.user?.role === Role.ADMIN)
 
-  return (
-    <Container maxWidth="md" style={{ marginTop: '50px' }}>
-      <Typography variant="h2" align="center" gutterBottom>
-        {t('welcome')}
-      </Typography>
-      <Typography variant="h5" align="center" paragraph>
-        {t('systemDescription')}
-      </Typography>
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-        <Button component={Link} to="/auth/register" variant="contained" color="primary" style={{ marginRight: '10px' }}>
-          {t('registerButton')}
-        </Button>
-        <Button component={Link} to="/auth/login" variant="contained" color="primary">
-          {t('loginButton')}
-        </Button>
-      </div>
-    </Container>
-  );
+  if (isLoggedIn) {
+    return isAdmin ? <AdminHome /> : <HomeLoggedIn />;
+  } else {
+    return <HomeNotLoggedIn />;
+  }
 };
 
 export default Home;

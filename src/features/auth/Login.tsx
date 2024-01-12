@@ -36,7 +36,7 @@ const Login = () => {
     <Container maxWidth="xs">
       <Paper elevation={0} style={{ padding: "20px" }}>
         <Typography variant="h4" align="center" gutterBottom>
-          {t('login')}
+          {t('auth.login')}
         </Typography>
         <form onSubmit={onSubmit}>
           <Controller
@@ -46,7 +46,7 @@ const Login = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label={t('emailAddress')}
+                label={t('auth.fields.email')}
                 variant="outlined"
                 fullWidth
                 margin="normal"
@@ -62,7 +62,7 @@ const Login = () => {
             render={({ field }) => (
               <TextField
                 {...field}
-                label={t('password')}
+                label={t('auth.fields.password')}
                 type="password"
                 variant="outlined"
                 fullWidth
@@ -73,7 +73,7 @@ const Login = () => {
           {errors.password && <p>{errors.password.message}</p>}
 
           <Button type="submit" variant="contained" color="primary" fullWidth>
-            {t('loginButton')}
+            {t('auth.login')}
           </Button>
         </form>
       </Paper>

@@ -1,24 +1,81 @@
 {
-    "welcome": "Welcome to VoteCampus",
+    "pageTitle": "Poll app",
+    "welcome": "Welcome to poll app",
     "systemDescription": "A system supporting university administration through electronic voting.",
-    "homePage": "Home",
-    "register": "Register",
-    "registerButton": "Register",
-    "login": "Login",
-    "loginButton": "Login",
-    "logout": "Logout",
-    "emailAddress": "E-mail",
-    "password": "Password",
-    "firstName": "First name",
-    "lastName": "Last name",
+    "loadMore": "Load more",
+    "noPollsFound": "No polls were found",
+    "fieldRequired": "This field is required",
+    "submit": "Save",
+    "home": {
+        "myPolls": "My polls",
+        "availablePolls": "Available polls"
+    },
+    "dialog": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
+    "vote": {
+        "submit": "Vote",
+        "castedSuccessfully": "Vote was successfully casted",
+        "alreadyVoted": "You've already casted vote in this poll. Please wait until poll closes for results.",
+        "confirm": {
+            "message": "Are you sure you want to cast an vote on \"{{answer}}\"? You can't change your vote later.",
+            "title": "Vote confirmation"
+        }
+    },
+    "poll": {
+        "created": "Poll was successfully created",
+        "edited": "Poll was successfully edited",
+        "add": "New poll",
+        "edit": "Edit poll",
+        "question": "Question",
+        "closesAt": "Closes at",
+        "createdAt": "Created at",
+        "public": "Is public",
+        "close": {
+            "confirm": {
+                "message": "Are you sure you want to close this poll?",
+                "title": "Closing the poll"
+            }
+        },
+        "answer": {
+            "provide": "Provide answer",
+            "add": "Add answer"
+        },
+        "nonSystemUsers": {
+            "email": "E-mail address",
+            "provideEmail": "Provide email",
+            "addEmail": "Add e-mail"
+        },
+        "systemUsers": {
+            "search": "Search user",
+            "provideName": "Provide user name"
+        },
+        "chart": {
+            "voteCount": "Number of votes"
+        }
+    },
+    "navigation": {
+        "home": "Home",
+        "register": "Register",
+        "login": "Login",
+        "logout": "Logout"
+    },
     "auth": {
         "loggedIn": "Logged in successfully",
         "loggedOut": "Logged out successfully",
-        "registered": "Your account has been registered successfully"
+        "registered": "Your account has been registered successfully",
+        "login": "Login",
+        "register": "Register",
+        "fields": {
+            "email": "E-mail address",
+            "password": "Password",
+            "firstName": "First name",
+            "lastName": "Last name"
+        }
     },
     "footer": {
-        "copyright": "© {{year}} VoteCampus",
-        "privacyPolicy": "Privacy Policy",
+        "copyright": "© {{year}} ",
         "language": "Language"
     },
     "languages": {
@@ -26,10 +83,12 @@
         "pl": "Polski"
     },
     "error": {
-        "server": "An error occurred while communicating with the server",
+        "server": "Unable to reach server",
+        "client": "An error occurred while communicating with the server",
         "auth": {
             "notLoggedIn": "You need to be logged in to do that!",
-            "alreadyLoggedIn": "You're already logged in!"
+            "alreadyLoggedIn": "You're already logged in!",
+            "sessionExpired": "Your session has expired. Please log in again"
         }
     }
   }

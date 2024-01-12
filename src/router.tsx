@@ -1,9 +1,12 @@
 import App from "App";
 import ErrorPage from "components/ErrorPage";
+import Poll from "features/poll/Poll";
 import Login from "features/auth/Login";
 import Register from "features/auth/Register";
 import Home from "features/home/Home";
 import { createBrowserRouter } from "react-router-dom";
+import EditPoll from "features/poll/form/EditPoll";
+import CreatePoll from "features/poll/form/CreatePoll";
 
 const router = createBrowserRouter([
     {
@@ -13,7 +16,7 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home /> // Dodaliśmy nową ścieżkę dla strony głównej
+                element: <Home />
             },
             {
                 path: "auth",
@@ -28,6 +31,23 @@ const router = createBrowserRouter([
                     },
                 ]
             },
+            {
+                path: "poll",
+                children: [
+                    {
+                        path: ":id",
+                        element: <Poll />
+                    },
+                    {
+                        path: "edit/:id",
+                        element: <EditPoll />
+                    },
+                    {
+                        path: "create",
+                        element: <CreatePoll />
+                    }
+                ]
+            }
         ]
     }
 ]);
