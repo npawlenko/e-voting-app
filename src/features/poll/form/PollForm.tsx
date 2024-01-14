@@ -3,13 +3,14 @@ import { Grid, TextField, Checkbox, FormControlLabel, Button, List, ListItem, Li
 import DeleteIcon from '@mui/icons-material/Delete';
 import EmailList from './components/EmailList';
 import SystemUserList from './components/SystemUserList';
-import { PollData, User } from 'utils/types';
+import { PollAnswerData, PollData, User } from 'utils/types';
 import { getFullName, isEmail } from 'utils/commonUtils';
 import { useNavigate } from 'react-router-dom';
 import { usePollForm } from 'hooks/usePollForm';
 import { Controller, SubmitHandler } from 'react-hook-form';
 import SelectedSystemUserList from './components/SelectedSystemUserList';
 import { t } from 'i18next';
+import { showAlert } from 'utils/errorUtils';
 
 export type PollFormProps = {
     defaultValues?: PollData | undefined;
@@ -47,7 +48,7 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
             setValue("closesAt", defaultValues.closesAt.slice(0, 16));
             setValue("isPublic", defaultValues.isPublic);
             setSelectedSystemUsers(defaultValues.systemUsers);
-            setPollAnswers(defaultValues.answers.map(a => a.answer));
+            setPollAnswers(defaultValues.answers);
         }
     }, [defaultValues, setValue, setPollAnswers, setSelectedSystemUsers]);
 
@@ -62,12 +63,14 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
     };
 
     const handleAddAnswer = (newAnswer: string) => {
-        if (newAnswer && !pollAnswers.includes(newAnswer)) {
-            setPollAnswers(prevAnswers => [...prevAnswers, newAnswer]);
+        console.log(newAnswer)
+        if (newAnswer && pollAnswers.filter(a => a.answer === newAnswer).length === 0) {
+            const toAdd = { id: '', answer: newAnswer }
+            setPollAnswers(prevAnswers => [...prevAnswers, toAdd]);
         }
     };
 
-    const handleRemoveAnswer = (answerToRemove: string) => {
+    const handleRemoveAnswer = (answerToRemove: PollAnswerData) => {
         setPollAnswers(pollAnswers.filter(answer => answer !== answerToRemove));
     };
 
@@ -99,7 +102,13 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
     const onSubmitForm: SubmitHandler<PollData> = (data) => {
         data.nonSystemUsersEmails = emailList;
         data.systemUsers = selectedSystemUsers;
-        data.answers = pollAnswers.map(a => ({id: '', answer: a}));
+        data.answers = pollAnswers;
+
+        if(!Array.isArray(data.answers) || data.answers.length < 2) {
+            showAlert('poll.addAtLeastTwoAnswers');
+            return;
+        }
+
         onSubmit(data);
         navigate("/");
     };
@@ -154,7 +163,7 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                     <List dense>
                         {pollAnswers.map((answer, index) => (
                             <ListItem key={index} style={{ background: '#252525', borderRadius: '4px', margin: '5px 0' }}>
-                                <ListItemText primary={answer} />
+                                <ListItemText primary={answer.answer} />
                                 <ListItemSecondaryAction>
                                     <IconButton edge="end" onClick={() => handleRemoveAnswer(answer)}>
                                         <DeleteIcon />

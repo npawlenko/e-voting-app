@@ -6,9 +6,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { showAlertAndLog, showAlert } from 'utils/errorUtils'
 import { ErrorSeverity } from 'features/error/ApplicationError'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from 'store/store'
 import { apolloClient } from 'services/apollo'
+import { Role } from 'features/auth/authSlice'
 
 const WhiteButton = styled(Button)<ButtonProps>(() => ({
   color: 'white',
@@ -18,6 +19,7 @@ const Navigation = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const isLoggedIn = useSelector((state: RootState) => state.auth.accessToken !== null);
+  const isAdmin = useSelector((state: RootState) => state.auth.user?.role === Role.ADMIN);
 
   const handleLogout = async () => {
     logout().then(() => {
@@ -46,11 +48,13 @@ const Navigation = () => {
               <Button onClick={handleLogout} color="inherit">
                 {t('navigation.logout')}
               </Button>
-              <Link component={RouterLink} to={`/poll/create`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <WhiteButton sx={{ml: 4}} variant="contained">
-                      {t('poll.add')}
-                  </WhiteButton>
-              </Link>
+              {!isAdmin &&
+                <Link component={RouterLink} to={`/poll/create`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <WhiteButton sx={{ml: 4}} variant="contained">
+                        {t('poll.add')}
+                    </WhiteButton>
+                </Link>
+              }
             </>
             :
             <>

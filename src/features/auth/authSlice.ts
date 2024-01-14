@@ -11,7 +11,8 @@ export type AuthState = {
 }
 
 export enum Role {
-    USER, ADMIN
+    USER = 'USER',
+    ADMIN = 'ADMIN'
 }
 
 export type User = {

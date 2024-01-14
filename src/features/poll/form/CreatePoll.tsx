@@ -10,6 +10,11 @@ import { showAlert } from 'utils/errorUtils';
 import { ErrorSeverity } from 'features/error/ApplicationError';
 import { addLocalTimezoneOffset } from 'utils/dateFormatter';
 
+function addHours(date: Date, hours: number) {
+    date.setTime(date.getTime() + (hours*60*60*1000));
+    return date;
+}
+
 const CreatePoll: React.FC = () => {
     const { t } = useTranslation();
     const [insertPoll] = useMutation(INSERT_POLL, {
@@ -19,7 +24,7 @@ const CreatePoll: React.FC = () => {
     const handleAddPoll = (poll: PollData) => {
         const pollInput: PollInput = {
             question: poll.question,
-            closesAt: new Date(addLocalTimezoneOffset(poll.closesAt)),
+            closesAt: addHours(new Date(addLocalTimezoneOffset(poll.closesAt)), 1),
             nonSystemUsersEmails: poll.nonSystemUsersEmails,
             systemUsers: poll.systemUsers.map(u => u.id),
             isPublic: poll.isPublic,

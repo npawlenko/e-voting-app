@@ -5,6 +5,7 @@
     "loadMore": "Load more",
     "noPollsFound": "No polls were found",
     "fieldRequired": "This field is required",
+    "invalidEmail": "Provided e-mail address is invalid",
     "submit": "Save",
     "home": {
         "myPolls": "My polls",
@@ -32,6 +33,7 @@
         "closesAt": "Closes at",
         "createdAt": "Created at",
         "public": "Is public",
+        "addAtLeastTwoAnswers": "Podaj co najmniej dwie odpowiedzi do ankiety!",
         "close": {
             "confirm": {
                 "message": "Are you sure you want to close this poll?",
@@ -64,12 +66,19 @@
     "auth": {
         "loggedIn": "Logged in successfully",
         "loggedOut": "Logged out successfully",
+        "invalidCredentials": "Provided login credentials are invalid",
         "registered": "Your account has been registered successfully",
         "login": "Login",
         "register": "Register",
+        "forgotPassword": "Forgot password?",
+        "resetPassword": "Reset password",
+        "sendResetLink": "Reset password",
+        "passwordReset": "Password was successfully changed",
+        "resetPasswordEmailSent": "Message containing link to resetting your password has been sent to your e-mail address",
         "fields": {
             "email": "E-mail address",
             "password": "Password",
+            "confirmPassword": "Potwierdź hasło",
             "firstName": "First name",
             "lastName": "Last name"
         }

@@ -1,30 +1,45 @@
 import { useState, useEffect } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { POLL, POLLS, USER_POLLS } from 'services/apollo/gql/pollQueries';
+import { DocumentNode, OperationVariables, QueryResult, useMutation, useQuery } from '@apollo/client';
+import { POLL, POLLS, POLL_BY_TOKEN, USER_POLLS } from 'services/apollo/gql/pollQueries';
 import { CLOSE_POLL, DELETE_POLL } from 'services/apollo/gql/pollMutations';
 import { PollData } from 'utils/types';
 
 type UsePollHook = {
     pollId: string | undefined
-};
+    token?: string | undefined
+}
 
-export const usePoll = ({ pollId }: UsePollHook) => {
+const refetchQueries = [POLL];
+
+function getQueryName(query: DocumentNode): string {
+    switch(query) {
+        case POLL:
+            return 'poll';
+        case POLL_BY_TOKEN:
+            return 'poll_by_token';
+        default:
+            return '';
+    }
+}
+
+export const usePoll = ({ pollId, token }: UsePollHook) => {
     const [poll, setPoll] = useState<PollData | undefined>(undefined);
-    const [deletePollMutation] = useMutation(DELETE_POLL, {
-        refetchQueries: [POLLS, USER_POLLS]
-    });
-    const [closePollMutation] = useMutation(CLOSE_POLL, {
-        refetchQueries: [POLL]
-    })
+    const [deletePollMutation] = useMutation(DELETE_POLL, {refetchQueries});
+    const [closePollMutation] = useMutation(CLOSE_POLL, {refetchQueries})
 
-    const { loading, data, error, refetch } = useQuery(POLL, {
-        variables: { pollId },
-        fetchPolicy: 'network-only'
-    });
+    const query = token === undefined ? POLL : POLL_BY_TOKEN;
+    const queryName = getQueryName(query);
+    const {loading, error, data, refetch} = useQuery(query, {
+        fetchPolicy: 'network-only',
+        variables: {
+            pollId,
+            token
+        }},
+    );
 
     useEffect(() => {
-        if(data && data.poll) {
-            setPoll(data.poll);
+        if(data && data[queryName]) {
+            setPoll(data[queryName]);
         }
     }, [data]);
 

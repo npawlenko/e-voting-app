@@ -65,14 +65,33 @@ export const POLL = gql`
 `;
 
 export const POLL_BY_TOKEN = gql`
-    query PollByToken($token: String!) {
-        poll_by_token(vote_token: $token) {
+    query PollByToken($pollId: ID!, $token: String!) {
+        poll_by_token(poll_id: $pollId, vote_token: $token) {
             id
+            creator {
+                id
+                firstName
+                lastName
+            }
+            systemUsers {
+                id
+                firstName
+                lastName
+            }
             question
             createdAt
             closesAt
             isPublic
             votePlaced
+            answers {
+                id
+                answer
+            }
+            votes {
+                answer {
+                    id
+                }
+            }
         }
     }
 `;
