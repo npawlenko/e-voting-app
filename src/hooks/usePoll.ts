@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { DocumentNode, OperationVariables, QueryResult, useMutation, useQuery } from '@apollo/client';
-import { POLL, POLLS, POLL_BY_TOKEN, USER_POLLS } from 'services/apollo/gql/pollQueries';
+import { DocumentNode, useMutation, useQuery } from '@apollo/client';
+import { POLL, POLL_BY_TOKEN } from 'services/apollo/gql/pollQueries';
 import { CLOSE_POLL, DELETE_POLL } from 'services/apollo/gql/pollMutations';
 import { PollData } from 'utils/types';
 
@@ -41,7 +41,7 @@ export const usePoll = ({ pollId, token }: UsePollHook) => {
         if(data && data[queryName]) {
             setPoll(data[queryName]);
         }
-    }, [data]);
+    }, [data, queryName]);
 
     useEffect(() => {
         if(error) {

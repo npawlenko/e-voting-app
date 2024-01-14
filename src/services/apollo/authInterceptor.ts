@@ -1,4 +1,4 @@
-import { ApolloLink, FetchResult, Observable, Operation } from '@apollo/client';
+import { ApolloLink } from '@apollo/client';
 import { store } from "store";
 
 export const authInterceptor = new ApolloLink((operation, forward) => {

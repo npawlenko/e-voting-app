@@ -182,8 +182,8 @@ const PollForm: React.FC<PollFormProps> = ({ defaultValues, onSubmit }) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder={t('poll.nonSystemUsers.provideEmail')}
-                        error={!!email && !isEmail(email)}
-                        helperText={!!email && !isEmail(email) ? t('invalidEmail') : ""}
+                        error={!!email || !isEmail(email)}
+                        helperText={!!email || !isEmail(email) ? t('invalidEmail') : ""}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>

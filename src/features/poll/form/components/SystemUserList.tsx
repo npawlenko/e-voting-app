@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, List, ListItem, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
 import { User } from 'utils/types';
 
 export type SystemUserListProps = {
