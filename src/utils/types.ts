@@ -15,6 +15,7 @@ export type PollInput = {
 }
 
 export type PollAnswerInput = {
+    id?: string
     answer: string
 }
 

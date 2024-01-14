@@ -1,10 +1,10 @@
-import { useMutation } from "@apollo/client";
+import { DocumentNode, useMutation } from "@apollo/client";
 import { Avatar, Box, Button, CardHeader, Container, Divider, FormControlLabel, Grid, Paper, Radio, RadioGroup, Typography, } from "@mui/material";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ConfirmActionDialog from "components/ConfirmActionDialog";
 import { useTranslation } from "react-i18next";
-import { INSERT_VOTE } from "services/apollo/gql/voteMutations";
+import { INSERT_VOTE, INSERT_VOTE_BY_TOKEN } from "services/apollo/gql/voteMutations";
 import { showAlert, showAlertAndLog } from "utils/errorUtils";
 import { ErrorSeverity } from "features/error/ApplicationError";
 import { cutTimeZone, formatDate } from "utils/dateFormatter";
@@ -19,28 +19,30 @@ import { parseISO, isPast } from 'date-fns';
 import ManagePoll from "./form/components/ManagePoll";
 import { useConfirmActionDialog } from "hooks/useConfirmActionDialog";
 
-
-
 const Poll: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, token } = useParams<{ id: string, token: string }>();
   const navigate = useNavigate();
   const userId: string|undefined = useSelector<RootState, string|undefined>(state => state.auth.user?.id);
-  const { loading, poll, deletePoll, closePoll } = usePoll({ pollId: id});
+  const { loading, poll, deletePoll, closePoll } = usePoll({ pollId: id, token});
   const [selectedAnswer, setSelectedAnswer] = useState<number>(-1);
   const { open, showDialog, handleConfirm, handleClose } = useConfirmActionDialog();
-  const [addVote] = useMutation(INSERT_VOTE, {
+  
+  const { t, i18n } = useTranslation();
+
+  const addVoteMutation = token === undefined ?  INSERT_VOTE : INSERT_VOTE_BY_TOKEN;
+  const [addVote] = useMutation(addVoteMutation, {
     refetchQueries: [POLL]
   });
-  const { t, i18n } = useTranslation();
 
   const handleSubmit = () => {
     if (!hasVoted) {
       showDialog(() => {
         if(selectedAnswer >= 0 && poll?.answers[selectedAnswer]) {
           addVote({
-            variables: { pollAnswerId: poll.answers[selectedAnswer].id }
+            variables: { pollAnswerId: poll.answers[selectedAnswer].id, token }
           }).then(() => {
             showAlert('vote.castedSuccessfully', ErrorSeverity.SUCCESS);
+            navigate(0);
           }).catch(error => {
             showAlertAndLog(error);
           });
@@ -126,7 +128,7 @@ const Poll: React.FC = () => {
           </Grid>
 
           <Box textAlign="center">
-            <Button variant="contained" color="primary" onClick={handleSubmit} disabled={hasVoted} sx={{my: 3}}>
+            <Button variant="contained" color="primary" onClick={handleSubmit} disabled={hasVoted || selectedAnswer === -1} sx={{my: 3}}>
               {t('vote.submit')}
             </Button>
           </Box>

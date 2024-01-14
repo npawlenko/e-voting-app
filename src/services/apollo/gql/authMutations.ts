@@ -24,6 +24,18 @@ export const LOGOUT = gql`
     }
 `;
 
+export const RESET_PASSWORD_INIT = gql`
+    mutation AuthResetPasswordInit($email: String!) {
+        auth_send_reset_password_link(email: $email)
+    }
+`;
+
+export const RESET_PASSWORD = gql`
+    mutation AuthResetPassword($password: String!, $resetToken: String!) {
+        auth_reset_password(new_password: $password, reset_token: $resetToken)
+    }
+`;
+
 export const REFRESH_TOKEN = gql`
     mutation AuthRefresh($refreshToken: String!) { 
         auth_refresh(refresh_token: $refreshToken) {

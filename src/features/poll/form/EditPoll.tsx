@@ -12,6 +12,11 @@ import { showAlert } from 'utils/errorUtils';
 import { ErrorSeverity } from 'features/error/ApplicationError';
 import { addLocalTimezoneOffset } from 'utils/dateFormatter';
 
+function addHours(date: Date, hours: number) {
+  date.setTime(date.getTime() + (hours*60*60*1000));
+  return date;
+}
+
 const EditPoll = () => {
   const { id: pollId } = useParams<{ id: string }>();
   const { t } = useTranslation();
@@ -26,7 +31,7 @@ const EditPoll = () => {
   const handleEditPoll = (poll: PollData) => {
     const pollInput: PollInput = {
       question: poll.question,
-      closesAt: new Date(addLocalTimezoneOffset(poll.closesAt)),
+      closesAt: addHours(new Date(addLocalTimezoneOffset(poll.closesAt)), 1),
       nonSystemUsersEmails: poll.nonSystemUsersEmails,
       systemUsers: poll.systemUsers.map(u => u.id),
       isPublic: poll.isPublic,

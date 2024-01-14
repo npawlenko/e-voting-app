@@ -7,6 +7,7 @@ import Home from "features/home/Home";
 import { createBrowserRouter } from "react-router-dom";
 import EditPoll from "features/poll/form/EditPoll";
 import CreatePoll from "features/poll/form/CreatePoll";
+import ResetPassword from "features/auth/ResetPassword";
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,15 @@ const router = createBrowserRouter([
                         path: "register",
                         element: <Register />
                     },
+                    {
+                        path: "reset",
+                        element: <ResetPassword />,
+                        children: [
+                            {
+                                path: ":token"
+                            }
+                        ]
+                    }
                 ]
             },
             {
@@ -36,7 +46,12 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: ":id",
-                        element: <Poll />
+                        element: <Poll />,
+                        children: [
+                            {
+                                path: ":token"
+                            }
+                        ]
                     },
                     {
                         path: "edit/:id",

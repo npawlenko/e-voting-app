@@ -5,6 +5,7 @@
     "loadMore": "Załaduj więcej",
     "noPollsFound": "Nie znaleziono pasujących ankiet",
     "fieldRequired": "Te pole jest obowiązkowe",
+    "invalidEmail": "Podany adres e-mail jest nieprawidłowy",
     "submit": "Zapisz",
     "home": {
         "myPolls": "Utworzone przeze mnie ankiety",
@@ -34,6 +35,7 @@
         "createdAt": "Utworzona",
         "public": "Czy publiczna",
         "submit": "Dodaj ankietę",
+        "addAtLeastTwoAnswers": "Podaj co najmniej dwie odpowiedzi do ankiety!",
         "close": {
             "close": "Zakończ",
             "confirm": {
@@ -67,12 +69,19 @@
     "auth": {
         "loggedIn": "Pomyślnie zalogowałeś się na konto",
         "loggedOut": "Zostałeś wylogowany",
+        "invalidCredentials": "Podane dane logowania są nieprawidłowe",
         "registered": "Twoje konto zostało pomyślnie zarejestrowane",
         "login": "Zaloguj się",
         "register": "Zarejestruj się",
+        "forgotPassword": "Zapomniałeś hasła?",
+        "resetPassword": "Resetowanie hasła",
+        "sendResetLink": "Resetuj hasło",
+        "passwordReset": "Hasło zostało pomyślnie zmienione",
+        "resetPasswordEmailSent": "Wiadomość z linkiem do resetowania hasła została wysłana na twój adres e-mail",
         "fields": {
             "email": "Adres e-mail",
             "password": "Hasło",
+            "confirmPassword": "Potwierdź hasło",
             "firstName": "Imię",
             "lastName": "Nazwisko"
         }

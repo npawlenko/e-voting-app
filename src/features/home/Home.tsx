@@ -8,7 +8,7 @@ import AdminHome from './AdminHome';
 
 const Home = () => {
   const isLoggedIn = useSelector((state: RootState) => state.auth.accessToken !== null);
-  const isAdmin = useSelector((state: RootState) => state.auth.user?.role === Role.ADMIN)
+  const isAdmin = useSelector((state: RootState) => state.auth.user?.role === Role.ADMIN);
 
   if (isLoggedIn) {
     return isAdmin ? <AdminHome /> : <HomeLoggedIn />;

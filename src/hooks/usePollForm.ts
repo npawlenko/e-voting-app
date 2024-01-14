@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Control, SubmitHandler, UseFormRegister, UseFormSetValue, useForm } from 'react-hook-form';
 import { useQuery } from '@apollo/client';
 import { USERS } from 'services/apollo/gql/userQueries';
-import { PollData, User } from 'utils/types';
+import { PollAnswerData, PollData, User } from 'utils/types';
 
 type UsePollFormHook = {
     defaultValues: PollData | undefined
@@ -25,8 +25,8 @@ export type UsePollFormReturn = {
     setSystemUserSearch: React.Dispatch<React.SetStateAction<string>>
     selectedSystemUsers: User[]
     setSelectedSystemUsers: React.Dispatch<React.SetStateAction<User[]>>
-    pollAnswers: string[]
-    setPollAnswers: React.Dispatch<React.SetStateAction<string[]>>
+    pollAnswers: PollAnswerData[]
+    setPollAnswers: React.Dispatch<React.SetStateAction<PollAnswerData[]>>
     newAnswer: string
     setNewAnswer: React.Dispatch<React.SetStateAction<string>>
 }
@@ -39,7 +39,7 @@ export const usePollForm = ({ defaultValues }: UsePollFormHook): UsePollFormRetu
   const [email, setEmail] = useState('');
   const [systemUserSearch, setSystemUserSearch] = useState('');
   const [selectedSystemUsers, setSelectedSystemUsers] = useState<User[]>([]);
-  const [pollAnswers, setPollAnswers] = useState<string[]>([]);
+  const [pollAnswers, setPollAnswers] = useState<PollAnswerData[]>([]);
   const [newAnswer, setNewAnswer] = useState('');
 
   return {

@@ -17,7 +17,7 @@ const ErrorAlert = () => {
 
   return (
     <Snackbar
-      anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
       open={!!errorMessage}
       autoHideDuration={5000}
       onClose={handleClose}
