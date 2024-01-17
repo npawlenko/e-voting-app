@@ -40,6 +40,7 @@ export const logout = async () => {
     await apolloClient.mutate({
         mutation: LOGOUT
     });
+    apolloClient.cache.reset();
 
     cookies.remove(ACCESS_TOKEN_COOKIE_NAME, {path: '/'});
     cookies.remove(REFRESH_TOKEN_COOKIE_NAME, {path: '/'});
