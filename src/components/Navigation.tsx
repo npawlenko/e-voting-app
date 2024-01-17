@@ -8,7 +8,6 @@ import { showAlertAndLog, showAlert } from 'utils/errorUtils'
 import { ErrorSeverity } from 'features/error/ApplicationError'
 import { useSelector } from 'react-redux'
 import { RootState } from 'store/store'
-import { apolloClient } from 'services/apollo'
 import { Role } from 'features/auth/authSlice'
 
 const WhiteButton = styled(Button)<ButtonProps>(() => ({
@@ -23,7 +22,6 @@ const Navigation = () => {
 
   const handleLogout = async () => {
     logout().then(() => {
-      apolloClient.cache.reset();
       showAlert("auth.loggedOut", ErrorSeverity.SUCCESS);
       navigate("/");
     }).catch(showAlertAndLog);
