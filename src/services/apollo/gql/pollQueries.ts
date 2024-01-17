@@ -16,6 +16,22 @@ export const POLLS = gql`
     }
 `;
 
+export const ALL_POLLS = gql`
+    query AllPollList($pageSize: Int, $pageNumber: Int) {
+        allPolls(page_size: $pageSize, page_number: $pageNumber) {
+            id
+            creator {
+                firstName
+                lastName
+            }
+            question
+            createdAt
+            closesAt
+            isPublic
+        }
+    }
+`;
+
 export const USER_POLLS = gql`
     query UserPollList($pageSize: Int, $pageNumber: Int) {
         user_polls(page_size: $pageSize, page_number: $pageNumber) {

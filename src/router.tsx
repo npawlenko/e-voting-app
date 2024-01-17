@@ -8,6 +8,7 @@ import { createBrowserRouter } from "react-router-dom";
 import EditPoll from "features/poll/form/EditPoll";
 import CreatePoll from "features/poll/form/CreatePoll";
 import ResetPassword from "features/auth/ResetPassword";
+import UserEdit from "features/user/form/UserEdit";
 
 const router = createBrowserRouter([
     {
@@ -60,6 +61,15 @@ const router = createBrowserRouter([
                     {
                         path: "create",
                         element: <CreatePoll />
+                    }
+                ]
+            },
+            {
+                path: "user",
+                children: [
+                    {
+                        path: "edit/:id",
+                        element: <UserEdit />
                     }
                 ]
             }

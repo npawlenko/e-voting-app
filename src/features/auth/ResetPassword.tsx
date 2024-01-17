@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { RESET_PASSWORD, RESET_PASSWORD_INIT } from "services/apollo/gql/authMutations";
-import { showAlert, showAlertAndLog } from "utils/errorUtils";
+import { showAlert } from "utils/errorUtils";
 import { ErrorSeverity } from "features/error/ApplicationError";
 
 type ResetPasswordFormValues = {

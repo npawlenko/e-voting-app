@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Snackbar, Alert } from '@mui/material';
 import useError from 'hooks/useError';
 import { ErrorSeverity } from './ApplicationError';

@@ -44,3 +44,10 @@ export type VoteData = {
         id: string
     }
 }
+
+export type UserData = {
+    id: string
+    firstName: string
+    lastName: string
+    email: string
+}

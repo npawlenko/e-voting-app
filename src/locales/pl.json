@@ -43,6 +43,13 @@
                 "title": "Zamykanie ankiety"
             }
         },
+        "deleteDialog": {
+            "success": "Pomyślnie usunięto ankietę",
+            "confirm": {
+                "message": "Czy jesteś pewien, że chcesz usunąć ankietę \"{{poll}}\"?",
+                "title": "Usuwanie ankiety"
+            }
+        },
         "answer": {
             "provide": "Wprowadź możliwą odpowiedź",
             "add": "Dodaj odpowiedź"
@@ -84,6 +91,24 @@
             "confirmPassword": "Potwierdź hasło",
             "firstName": "Imię",
             "lastName": "Nazwisko"
+        }
+    },
+    "admin": {
+        "dashboard": "Panel administratora",
+        "managePolls": "Zarządzaj ankietami",
+        "manageUsers": "Zarządzaj użytkownikami"
+    },
+    "user": {
+        "edit": "Edytuj użytkownika",
+        "delete": {
+            "success": "Pomyślnie usunięto użytkownika",
+            "confirm": {
+                "message": "Czy jesteś pewien, że chcesz usunąć użytkownika \"{{user}}\"?",
+                "title": "Usuwanie użytkownika"
+            }
+        },
+        "update": {
+            "success": "Pomyślnie edytowano użytkownika"
         }
     },
     "footer": {

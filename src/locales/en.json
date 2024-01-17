@@ -40,6 +40,13 @@
                 "title": "Closing the poll"
             }
         },
+        "deleteDialog": {
+            "success": "Successfull deleted poll",
+            "confirm": {
+                "message": "Are you sure you want to delete poll \"{{poll}}\"?",
+                "title": "Poll deletion"
+            }
+        },
         "answer": {
             "provide": "Provide answer",
             "add": "Add answer"
@@ -81,6 +88,24 @@
             "confirmPassword": "Potwierdź hasło",
             "firstName": "First name",
             "lastName": "Last name"
+        }
+    },
+    "admin": {
+        "dashboard": "Admin dashboard",
+        "managePolls": "Manage polls",
+        "manageUsers": "Manage users"
+    },
+    "user": {
+        "edit": "Edit user",
+        "delete": {
+            "success": "Successfully deleted user",
+            "confirm": {
+                "message": "Are you sure you want to delete user \"{{user}}\"?",
+                "title": "User deletion"
+            }
+        },
+        "update": {
+            "success": "User was successfully updated"
         }
     },
     "footer": {
